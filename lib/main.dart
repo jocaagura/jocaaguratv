@@ -1,6 +1,7 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 
+import 'src/data/services/remote/internet_checker.dart';
 import 'src/data/services/repositories_implementations/auth_repository_impl.dart';
 import 'src/data/services/repositories_implementations/connectivity_repository_imp.dart';
 import 'src/domain/repositories/auth_repository.dart';
@@ -11,7 +12,10 @@ void main() {
   runApp(
     Injector(
       authRepository: AuthRepositoryImpl(),
-      connectivityRepository: ConnectivityRepositoryImpl(Connectivity()),
+      connectivityRepository: ConnectivityRepositoryImpl(
+        Connectivity(),
+        InternetChecker(),
+      ),
       child: const MyApp(),
     ),
   );
