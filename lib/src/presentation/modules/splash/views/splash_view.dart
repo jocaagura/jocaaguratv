@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../main.dart';
-import '../../../../data/services/repositories_implementations/connectivity_repository_imp.dart';
 import '../../../../domain/models/user_model.dart';
 import '../../../../domain/repositories/auth_repository.dart';
 import '../../../routes/routes.dart';
@@ -14,9 +13,6 @@ class SplashView extends StatefulWidget {
 }
 
 class _SplashViewState extends State<SplashView> {
-  ConnectivityRepositoryImpl connectivityRepositoryImpl =
-      ConnectivityRepositoryImpl();
-
   @override
   void initState() {
     super.initState();
@@ -29,7 +25,6 @@ class _SplashViewState extends State<SplashView> {
     final Injector injector = Injector.of(context);
     final bool hasInternet = await injector.connectivityRepository.hasInternet;
     print('😊');
-
     print(hasInternet);
     if (hasInternet) {
       final AuthRepository auth = injector.authRepository;
@@ -43,7 +38,9 @@ class _SplashViewState extends State<SplashView> {
       } else if (mounted) {
         _goTo(Routes.signIn);
       }
-    } else {}
+    } else {
+      _goTo(Routes.offline);
+    }
   }
 
   Future<void> _goTo(String routeName) async {
