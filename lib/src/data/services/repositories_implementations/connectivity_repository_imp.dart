@@ -38,8 +38,6 @@ class ConnectivityRepositoryImpl implements ConnectivityRepository {
       // I am not connected to any network.
       return false;
     }
-    print('CHECK CONECTION 🤦‍♀️');
-    print(connectivityResult);
     return _hasInternet();
   }
 

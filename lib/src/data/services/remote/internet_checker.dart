@@ -18,15 +18,14 @@ class InternetChecker {
       } else {
         final List<InternetAddress> list =
             await InternetAddress.lookup('google.com');
-        print('Chequeando internet 🐱‍🏍');
-        print(list);
-        print(list.first);
         if (list.isNotEmpty && list.first.rawAddress.isNotEmpty) {
           result = true;
         }
       }
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
     return result;
   }

@@ -1,5 +1,7 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import '../../../domain/either.dart';
+import '../../../domain/enums.dart';
 import '../../../domain/models/user_model.dart';
 import '../../../domain/repositories/auth_repository.dart';
 
@@ -24,5 +26,26 @@ class AuthRepositoryImpl implements AuthRepository {
       return true;
     }
     return false;
+  }
+
+  @override
+  Future<Either<SignInFailure, UserModel>> signIn(
+    String userName,
+    String password,
+  ) async {
+    await Future<void>.delayed(
+      const Duration(seconds: 2),
+    );
+    if (userName != 'test') {
+      return Future<Either<SignInFailure, UserModel>>.value(
+        const Left<SignInFailure, UserModel>(SignInFailure.notFound),
+      );
+    }
+    if (password != '123456') {
+      return Future<Either<SignInFailure, UserModel>>.value(
+        const Left<SignInFailure, UserModel>(SignInFailure.unauthorized),
+      );
+    }
+    return Right<SignInFailure, UserModel>(UserModel());
   }
 }
