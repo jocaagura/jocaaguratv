@@ -1,5 +1,6 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'src/data/services/remote/internet_checker.dart';
 import 'src/data/services/repositories_implementations/auth_repository_impl.dart';
@@ -11,7 +12,9 @@ import 'src/my_app.dart';
 void main() {
   runApp(
     Injector(
-      authRepository: AuthRepositoryImpl(),
+      authRepository: const AuthRepositoryImpl(
+        FlutterSecureStorage(),
+      ),
       connectivityRepository: ConnectivityRepositoryImpl(
         Connectivity(),
         InternetChecker(),

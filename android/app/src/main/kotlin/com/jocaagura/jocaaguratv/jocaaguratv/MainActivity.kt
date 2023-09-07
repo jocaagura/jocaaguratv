@@ -1,4 +1,4 @@
-package com.jocaagura.jocaaguratv.jocaaguratv
+package com.jocaagura.jocaaguratv
 
 import io.flutter.embedding.android.FlutterActivity
 
