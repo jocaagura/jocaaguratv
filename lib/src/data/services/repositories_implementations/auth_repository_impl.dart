@@ -4,23 +4,26 @@ import '../../../domain/either.dart';
 import '../../../domain/enums.dart';
 import '../../../domain/models/user_model.dart';
 import '../../../domain/repositories/auth_repository.dart';
+import '../remote/auth_api.dart';
 
 const String _key = 'jocaaguratvsesionid';
 
 class AuthRepositoryImpl implements AuthRepository {
-  const AuthRepositoryImpl(this._securedStorage);
+  const AuthRepositoryImpl(
+    this._securedStorage,
+    this._authApi,
+  );
   final FlutterSecureStorage _securedStorage;
-
+  final AuthApi _authApi;
   @override
   Future<UserModel?> getUserData() async {
     final String? sesionId = await _securedStorage.read(key: _key);
     if (sesionId != null) {
+      // TODO(jocaagura): Generar codigo para la recuperacion del usuario
+
       return UserModel();
     }
-    return Future<UserModel?>.value(
-      null,
-      //UserModel(),
-    );
+    return Future<UserModel?>.value();
   }
 
   @override
@@ -37,22 +40,35 @@ class AuthRepositoryImpl implements AuthRepository {
     String userName,
     String password,
   ) async {
-    await Future<void>.delayed(
-      const Duration(seconds: 2),
+    final String? requestToken = await _authApi.createRequestToken();
+    if (requestToken == null) {
+      return const Left<SignInFailure, UserModel>(SignInFailure.unknow);
+    }
+    final Either<SignInFailure, String> loginResult =
+        await _authApi.createSessionWithLogin(
+      username: userName,
+      password: password,
+      requestToken: requestToken,
     );
-    if (userName != 'test') {
-      return Future<Either<SignInFailure, UserModel>>.value(
-        const Left<SignInFailure, UserModel>(SignInFailure.notFound),
-      );
-    }
-    if (password != '123456') {
-      return Future<Either<SignInFailure, UserModel>>.value(
-        const Left<SignInFailure, UserModel>(SignInFailure.unauthorized),
-      );
-    }
-    // TODO(jocaagura): finalizar el inicio de sesion con un USERMODEL valido
-    _securedStorage.write(key: _key, value: 'sessionID');
-    return Right<SignInFailure, UserModel>(UserModel());
+
+    return loginResult.when((SignInFailure signInFailure) {
+      return Left<SignInFailure, UserModel>(signInFailure);
+    }, (String newRequestToken) async {
+      final Either<SignInFailure, String> sesionResult =
+          await _authApi.createSession(newRequestToken);
+      return sesionResult.when((SignInFailure signInFailure) {
+        return Left<SignInFailure, UserModel>(signInFailure);
+      }, (String sesionToken) {
+        _securedStorage.write(
+          key: _key,
+          value: sesionToken,
+        );
+        return Right<SignInFailure, UserModel>(
+          // TODO(jocaagura): Completar el modelo usuario
+          UserModel(),
+        );
+      });
+    });
   }
 
   @override

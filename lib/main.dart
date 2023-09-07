@@ -1,7 +1,9 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart' as http;
 
+import 'src/data/services/remote/auth_api.dart';
 import 'src/data/services/remote/internet_checker.dart';
 import 'src/data/services/repositories_implementations/auth_repository_impl.dart';
 import 'src/data/services/repositories_implementations/connectivity_repository_imp.dart';
@@ -12,8 +14,9 @@ import 'src/my_app.dart';
 void main() {
   runApp(
     Injector(
-      authRepository: const AuthRepositoryImpl(
-        FlutterSecureStorage(),
+      authRepository: AuthRepositoryImpl(
+        const FlutterSecureStorage(),
+        AuthApi(http.Client()),
       ),
       connectivityRepository: ConnectivityRepositoryImpl(
         Connectivity(),
