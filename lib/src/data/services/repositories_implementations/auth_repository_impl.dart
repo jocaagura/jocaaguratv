@@ -12,7 +12,11 @@ class AuthRepositoryImpl implements AuthRepository {
   final FlutterSecureStorage _securedStorage;
 
   @override
-  Future<UserModel?> getUserData() {
+  Future<UserModel?> getUserData() async {
+    final String? sesionId = await _securedStorage.read(key: _key);
+    if (sesionId != null) {
+      return UserModel();
+    }
     return Future<UserModel?>.value(
       null,
       //UserModel(),
@@ -46,6 +50,13 @@ class AuthRepositoryImpl implements AuthRepository {
         const Left<SignInFailure, UserModel>(SignInFailure.unauthorized),
       );
     }
+    // TODO(jocaagura): finalizar el inicio de sesion con un USERMODEL valido
+    _securedStorage.write(key: _key, value: 'sessionID');
     return Right<SignInFailure, UserModel>(UserModel());
+  }
+
+  @override
+  Future<void> signOut() async {
+    await _securedStorage.delete(key: _key);
   }
 }
