@@ -23,7 +23,7 @@ class HomeView extends StatelessWidget {
                   Routes.splash,
                 );
               },
-            )
+            ),
           ],
         ),
       ),
