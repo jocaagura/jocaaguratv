@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import '../../../../../main.dart';
+import '../../../../domain/repositories/auth_repository.dart';
 import '../../../routes/routes.dart';
 
 class HomeView extends StatelessWidget {
@@ -18,7 +19,7 @@ class HomeView extends StatelessWidget {
               color: Theme.of(context).colorScheme.error,
               child: const Text('Cerrar sesion'),
               onPressed: () {
-                Injector.of(context).authRepository.signOut();
+                Provider.of<AuthRepository>(context, listen: false).signOut();
                 Navigator.of(context).pushReplacementNamed(
                   Routes.splash,
                 );

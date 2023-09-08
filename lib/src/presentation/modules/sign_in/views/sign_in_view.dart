@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import '../../../../../main.dart';
 import '../../../../domain/either.dart';
 import '../../../../domain/enums.dart';
 import '../../../../domain/models/user_model.dart';
+import '../../../../domain/repositories/auth_repository.dart';
 import '../../../routes/routes.dart';
 
 class SignInView extends StatefulWidget {
@@ -113,7 +114,8 @@ class _SignInViewState extends State<SignInView> {
       _validating = true;
     });
     final Either<SignInFailure, UserModel> result =
-        await Injector.of(context).authRepository.signIn(_userName, _password);
+        await Provider.of<AuthRepository>(context, listen: false)
+            .signIn(_userName, _password);
     if (!mounted) {
       return;
     }
