@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../domain/either.dart';
@@ -15,8 +16,9 @@ class Http {
 
   final http.Client _client;
   final String _baseUrl;
-  Future<Either<HttpFailure, String>> request(
+  Future<Either<HttpFailure, R>> request<R>(
     String path, {
+    required R Function(String responseBody) onSuccess,
     HttpMethod httpMethod = HttpMethod.get,
     Map<String, String> headers = const <String, String>{
       'Content-type': 'application/json',
@@ -34,6 +36,7 @@ class Http {
       path: path,
       queryParameters: queryParameters,
     );
+    final Map<String, dynamic> logs = <String, dynamic>{};
     try {
       switch (httpMethod) {
         case HttpMethod.get:
@@ -45,44 +48,66 @@ class Http {
             headers: headers,
             body: bodyString,
           );
+          break;
         case HttpMethod.patch:
           response = await _client.patch(
             url,
             headers: headers,
             body: bodyString,
           );
+          break;
         case HttpMethod.delete:
           response = await _client.delete(
             url,
             headers: headers,
             body: bodyString,
           );
+          break;
         case HttpMethod.put:
           response = await _client.put(
             url,
             headers: headers,
             body: bodyString,
           );
+          break;
       }
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        return Right<HttpFailure, String>(response.body);
+        return Right<HttpFailure, R>(onSuccess(response.body));
       }
-      return Left<HttpFailure, String>(
+      logs['startDate'] = DateTime.now().toString();
+      logs['url'] = url.toString();
+      logs['method'] = httpMethod;
+      logs['body'] = body;
+      logs['status code'] = response.statusCode;
+      logs['response body'] = response.body;
+      return Left<HttpFailure, R>(
         HttpFailure(
           statusCode: response.statusCode,
         ),
       );
-    } catch (e) {
+    } catch (e, stackTrace) {
       if (e is SocketException || e is http.ClientException) {
-        print('🤦‍♀️ Error en red $e');
-        return Left<HttpFailure, String>(
+        logs['exception'] = 'Network Exception';
+        if (kDebugMode) {
+          print('🤦‍♀️ Error en red ($stackTrace): $e');
+        }
+        return Left<HttpFailure, R>(
           HttpFailure(exception: NetworkException()),
         );
       }
-      return Left<HttpFailure, String>(
+      logs['exception'] = e;
+      logs['stackTrace'] = stackTrace.toString();
+      return Left<HttpFailure, R>(
         HttpFailure(exception: e),
       );
+    } finally {
+      if (logs.isNotEmpty) {
+        if (kDebugMode) {
+          logs['endDate'] = DateTime.now().toString();
+          print('🤦‍♀️ Error : $logs');
+        }
+      }
     }
   }
 }

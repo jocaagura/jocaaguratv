@@ -12,19 +12,18 @@ class AuthApi {
   final Http _http;
 
   Future<Either<SignInFailure, String>> createRequestToken() async {
-    final Either<HttpFailure, String> result =
-        await _http.request('3/authentication/token/new');
-    return result.when((HttpFailure httpFailure) {
-      if (httpFailure.exception != null) {
-        return const Left<SignInFailure, String>(SignInFailure.network);
-      }
-      return const Left<SignInFailure, String>(SignInFailure.unknow);
-    }, (String responseBody) {
-      final Map<String, dynamic> json = Map<String, dynamic>.from(
-        jsonDecode(responseBody) as Map<dynamic, dynamic>,
-      );
+    final Either<HttpFailure, String> result = await _http.request(
+      '3/authentication/token/new',
+      onSuccess: (String responseBody) {
+        final Map<String, dynamic> json = Map<String, dynamic>.from(
+          jsonDecode(responseBody) as Map<dynamic, dynamic>,
+        );
+        return json['request_token']?.toString() ?? '';
+      },
+    );
+    return result.when(_httpFailure, (String requestToken) {
       return Right<SignInFailure, String>(
-        json['request_token']?.toString() ?? '',
+        requestToken,
       );
     });
   }
@@ -36,6 +35,12 @@ class AuthApi {
   }) async {
     final Either<HttpFailure, String> result = await _http.request(
       '3/authentication/token/validate_with_login',
+      onSuccess: (String responseBody) {
+        final Map<String, dynamic> json = Map<String, dynamic>.from(
+          jsonDecode(responseBody) as Map<dynamic, dynamic>,
+        );
+        return json['request_token'].toString();
+      },
       httpMethod: HttpMethod.post,
       body: <String, String>{
         'username': username,
@@ -43,13 +48,8 @@ class AuthApi {
         'request_token': requestToken,
       },
     );
-    return result.when((HttpFailure httpFailure) {
-      return _httpFailure(httpFailure);
-    }, (String response) {
-      final Map<String, dynamic> json = Map<String, dynamic>.from(
-        jsonDecode(response) as Map<dynamic, dynamic>,
-      );
-      return Right<SignInFailure, String>(json['request_token'].toString());
+    return result.when(_httpFailure, (String newRequestToken) {
+      return Right<SignInFailure, String>(newRequestToken);
     });
   }
 
@@ -62,23 +62,19 @@ class AuthApi {
       body: <String, String>{
         'request_token': requestToken,
       },
+      onSuccess: (String responseBody) {
+        final Map<String, dynamic> json = Map<String, dynamic>.from(
+          jsonDecode(responseBody) as Map<dynamic, dynamic>,
+        );
+        return json['session_id'].toString();
+      },
     );
-    return result.when((HttpFailure httpFailure) {
-      return _httpFailure(httpFailure);
-    }, (String responseBody) {
-      final Map<String, dynamic> json = Map<String, dynamic>.from(
-        jsonDecode(responseBody) as Map<dynamic, dynamic>,
-      );
-      return Right<SignInFailure, String>(
-        json['session_id'].toString(),
-      );
+    return result.when(_httpFailure, (String sesionId) {
+      return Right<SignInFailure, String>(sesionId);
     });
   }
 
   Either<SignInFailure, String> _httpFailure(HttpFailure httpFailure) {
-    print('DEVOLVIENDO AQUI');
-    print(httpFailure.exception);
-    print(httpFailure.statusCode);
     if (httpFailure.exception != null) {
       return const Left<SignInFailure, String>(SignInFailure.network);
     }
