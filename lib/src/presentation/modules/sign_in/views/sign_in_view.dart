@@ -114,8 +114,7 @@ class _SignInViewState extends State<SignInView> {
       _validating = true;
     });
     final Either<SignInFailure, UserModel> result =
-        await Provider.of<AuthRepository>(context, listen: false)
-            .signIn(_userName, _password);
+        await context.read<AuthRepository>().signIn(_userName, _password);
     if (!mounted) {
       return;
     }

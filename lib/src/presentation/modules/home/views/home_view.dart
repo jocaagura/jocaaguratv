@@ -19,7 +19,7 @@ class HomeView extends StatelessWidget {
               color: Theme.of(context).colorScheme.error,
               child: const Text('Cerrar sesion'),
               onPressed: () {
-                Provider.of<AuthRepository>(context, listen: false).signOut();
+                context.read<AuthRepository>().signOut();
                 Navigator.of(context).pushReplacementNamed(
                   Routes.splash,
                 );
