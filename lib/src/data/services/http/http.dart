@@ -1,9 +1,11 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
 
 import '../../../domain/either.dart';
-import '../remote/auth_api.dart';
+
+const String kApiKey = 'df3952a67d9b47d7968f2d67a4d2f2a2';
 
 class Http {
   Http(
@@ -22,11 +24,14 @@ class Http {
     Map<String, String> queryParameters = const <String, String>{
       'api_key': kApiKey,
     },
+    Map<String, dynamic> body = const <String, dynamic>{},
   }) async {
     late final http.Response response;
+    final String bodyString = jsonEncode(body);
     final Uri url = Uri(
-      host: path.startsWith('http') ? path : '$_baseUrl$path',
+      host: _baseUrl,
       scheme: 'https',
+      path: path,
       queryParameters: queryParameters,
     );
     try {
@@ -35,13 +40,29 @@ class Http {
           response = await _client.get(url, headers: headers);
           break;
         case HttpMethod.post:
-          response = await _client.post(url, headers: headers);
+          response = await _client.post(
+            url,
+            headers: headers,
+            body: bodyString,
+          );
         case HttpMethod.patch:
-          response = await _client.patch(url, headers: headers);
+          response = await _client.patch(
+            url,
+            headers: headers,
+            body: bodyString,
+          );
         case HttpMethod.delete:
-          response = await _client.delete(url, headers: headers);
+          response = await _client.delete(
+            url,
+            headers: headers,
+            body: bodyString,
+          );
         case HttpMethod.put:
-          response = await _client.put(url, headers: headers);
+          response = await _client.put(
+            url,
+            headers: headers,
+            body: bodyString,
+          );
       }
 
       if (response.statusCode >= 200 && response.statusCode < 300) {

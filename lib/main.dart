@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
+import 'src/data/services/http/http.dart';
 import 'src/data/services/remote/auth_api.dart';
 import 'src/data/services/remote/internet_checker.dart';
 import 'src/data/services/repositories_implementations/auth_repository_impl.dart';
@@ -16,7 +17,12 @@ void main() {
     Injector(
       authRepository: AuthRepositoryImpl(
         const FlutterSecureStorage(),
-        AuthApi(http.Client()),
+        AuthApi(
+          Http(
+            kBaseUrl,
+            http.Client(),
+          ),
+        ),
       ),
       connectivityRepository: ConnectivityRepositoryImpl(
         Connectivity(),

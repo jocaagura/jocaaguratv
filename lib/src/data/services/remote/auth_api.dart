@@ -1,41 +1,27 @@
 import 'dart:convert';
-import 'dart:io';
-
-import 'package:flutter/foundation.dart';
-import 'package:http/http.dart' as http;
 
 import '../../../domain/either.dart';
 import '../../../domain/enums.dart';
+import '../http/http.dart';
 
 const String kBaseUrl = 'api.themoviedb.org';
-const String kApiKey = 'df3952a67d9b47d7968f2d67a4d2f2a2';
 
 class AuthApi {
-  const AuthApi(this._client);
-  final http.Client _client;
+  const AuthApi(this._http);
+
+  final Http _http;
 
   Future<String?> createRequestToken() async {
-    try {
-      final http.Response response = await _client.get(
-        Uri(
-          host: kBaseUrl,
-          scheme: 'https',
-          path: '3/authentication/token/new',
-          queryParameters: <String, String>{'api_key': kApiKey},
-        ),
+    final Either<HttpFailure, String> result =
+        await _http.request('3/authentication/token/new');
+    return result.when((HttpFailure httpFailure) {
+      return null;
+    }, (String responseBody) {
+      final Map<String, dynamic> json = Map<String, dynamic>.from(
+        jsonDecode(responseBody) as Map<dynamic, dynamic>,
       );
-      if (response.statusCode == 200) {
-        final Map<String, dynamic> json = Map<String, dynamic>.from(
-          jsonDecode(response.body) as Map<dynamic, dynamic>,
-        );
-        return json['request_token'].toString();
-      }
-    } catch (e) {
-      if (kDebugMode) {
-        print('🤦‍♀️ Error: $e');
-      }
-    }
-    return null;
+      return json['request_token']?.toString();
+    });
   }
 
   Future<Either<SignInFailure, String>> createSessionWithLogin({
@@ -43,92 +29,58 @@ class AuthApi {
     required String password,
     required String requestToken,
   }) async {
-    try {
-      final http.Response response = await _client.post(
-        Uri(
-          host: kBaseUrl,
-          scheme: 'https',
-          path: '3/authentication/token/validate_with_login',
-          queryParameters: <String, String>{
-            'api_key': kApiKey,
-          },
-        ),
-        headers: <String, String>{
-          'Content-type': 'application/json',
-        },
-        body: jsonEncode(<String, String>{
-          'username': username,
-          'password': password,
-          'request_token': requestToken,
-        }),
+    final Either<HttpFailure, String> result = await _http.request(
+      '3/authentication/token/validate_with_login',
+      httpMethod: HttpMethod.post,
+      body: <String, String>{
+        'username': username,
+        'password': password,
+        'request_token': requestToken,
+      },
+    );
+    return result.when((HttpFailure httpFailure) {
+      return _httpFailure(httpFailure);
+    }, (String response) {
+      final Map<String, dynamic> json = Map<String, dynamic>.from(
+        jsonDecode(response) as Map<dynamic, dynamic>,
       );
-      switch (response.statusCode) {
-        case 200:
-          final Map<String, dynamic> json = Map<String, dynamic>.from(
-            jsonDecode(response.body) as Map<dynamic, dynamic>,
-          );
-          return Right<SignInFailure, String>(json['request_token'].toString());
-        case 401:
-          return const Left<SignInFailure, String>(SignInFailure.unauthorized);
-        case 404:
-          return const Left<SignInFailure, String>(SignInFailure.notFound);
-
-        default:
-          return const Left<SignInFailure, String>(SignInFailure.unknow);
-      }
-    } catch (e) {
-      if (e is SocketException) {
-        return const Left<SignInFailure, String>(SignInFailure.network);
-      }
-      if (kDebugMode) {
-        print('🤦‍♀️ Error: $e');
-      }
-    }
-    return const Left<SignInFailure, String>(SignInFailure.unknow);
+      return Right<SignInFailure, String>(json['request_token'].toString());
+    });
   }
 
   Future<Either<SignInFailure, String>> createSession(
     String requestToken,
   ) async {
-    try {
-      final http.Response response = await _client.post(
-        Uri(
-          host: kBaseUrl,
-          scheme: 'https',
-          path: '3/authentication/session/new',
-          queryParameters: <String, String>{
-            'api_key': kApiKey,
-          },
-        ),
-        headers: <String, String>{
-          'Content-type': 'application/json',
-        },
-        body: jsonEncode(<String, String>{
-          'request_token': requestToken,
-        }),
+    final Either<HttpFailure, String> result = await _http.request(
+      '3/authentication/session/new',
+      httpMethod: HttpMethod.post,
+      body: <String, String>{
+        'request_token': requestToken,
+      },
+    );
+    return result.when((HttpFailure httpFailure) {
+      return _httpFailure(httpFailure);
+    }, (String responseBody) {
+      final Map<String, dynamic> json = Map<String, dynamic>.from(
+        jsonDecode(responseBody) as Map<dynamic, dynamic>,
       );
-      switch (response.statusCode) {
-        case 200:
-          final Map<String, dynamic> json = Map<String, dynamic>.from(
-            jsonDecode(response.body) as Map<dynamic, dynamic>,
-          );
-          return Right<SignInFailure, String>(json['session_id'].toString());
-        case 401:
-          return const Left<SignInFailure, String>(SignInFailure.unauthorized);
-        case 404:
-          return const Left<SignInFailure, String>(SignInFailure.notFound);
+      return Right<SignInFailure, String>(
+        json['session_id'].toString(),
+      );
+    });
+  }
 
-        default:
-          return const Left<SignInFailure, String>(SignInFailure.unknow);
-      }
-    } catch (e) {
-      if (e is SocketException) {
-        return const Left<SignInFailure, String>(SignInFailure.network);
-      }
-      if (kDebugMode) {
-        print('🤦‍♀️ Error: $e');
-      }
+  Either<SignInFailure, String> _httpFailure(HttpFailure httpFailure) {
+    if (httpFailure.exception is NetworkException) {
+      return const Left<SignInFailure, String>(SignInFailure.network);
     }
-    return const Left<SignInFailure, String>(SignInFailure.unknow);
+    switch (httpFailure.statusCode) {
+      case 401:
+        return const Left<SignInFailure, String>(SignInFailure.unauthorized);
+      case 404:
+        return const Left<SignInFailure, String>(SignInFailure.notFound);
+      default:
+        return const Left<SignInFailure, String>(SignInFailure.unknow);
+    }
   }
 }
