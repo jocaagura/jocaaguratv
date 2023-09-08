@@ -75,6 +75,7 @@ class Http {
       );
     } catch (e) {
       if (e is SocketException || e is http.ClientException) {
+        print('🤦‍♀️ Error en red $e');
         return Left<HttpFailure, String>(
           HttpFailure(exception: NetworkException()),
         );

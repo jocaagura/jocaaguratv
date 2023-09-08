@@ -40,9 +40,17 @@ class AuthRepositoryImpl implements AuthRepository {
     String userName,
     String password,
   ) async {
-    final String? requestToken = await _authApi.createRequestToken();
-    if (requestToken == null) {
-      return const Left<SignInFailure, UserModel>(SignInFailure.unknow);
+    String requestToken = '';
+    final Either<SignInFailure, String> res =
+        await _authApi.createRequestToken();
+    res.when((SignInFailure p0) {
+      return Left<SignInFailure, String>(p0);
+    }, (String p0) {
+      requestToken = p0;
+    });
+
+    if (requestToken.isEmpty) {
+      return const Left<SignInFailure, UserModel>(SignInFailure.network);
     }
     final Either<SignInFailure, String> loginResult =
         await _authApi.createSessionWithLogin(

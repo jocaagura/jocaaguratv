@@ -11,16 +11,21 @@ class AuthApi {
 
   final Http _http;
 
-  Future<String?> createRequestToken() async {
+  Future<Either<SignInFailure, String>> createRequestToken() async {
     final Either<HttpFailure, String> result =
         await _http.request('3/authentication/token/new');
     return result.when((HttpFailure httpFailure) {
-      return null;
+      if (httpFailure.exception != null) {
+        return const Left<SignInFailure, String>(SignInFailure.network);
+      }
+      return const Left<SignInFailure, String>(SignInFailure.unknow);
     }, (String responseBody) {
       final Map<String, dynamic> json = Map<String, dynamic>.from(
         jsonDecode(responseBody) as Map<dynamic, dynamic>,
       );
-      return json['request_token']?.toString();
+      return Right<SignInFailure, String>(
+        json['request_token']?.toString() ?? '',
+      );
     });
   }
 
@@ -71,7 +76,10 @@ class AuthApi {
   }
 
   Either<SignInFailure, String> _httpFailure(HttpFailure httpFailure) {
-    if (httpFailure.exception is NetworkException) {
+    print('DEVOLVIENDO AQUI');
+    print(httpFailure.exception);
+    print(httpFailure.statusCode);
+    if (httpFailure.exception != null) {
       return const Left<SignInFailure, String>(SignInFailure.network);
     }
     switch (httpFailure.statusCode) {
