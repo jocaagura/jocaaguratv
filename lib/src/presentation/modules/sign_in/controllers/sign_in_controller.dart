@@ -1,39 +1,45 @@
-import 'package:flutter/foundation.dart';
-
+import '../../../../domain/either.dart';
+import '../../../../domain/enums.dart';
+import '../../../../domain/models/user_model.dart';
+import '../../../../domain/repositories/auth_repository.dart';
+import '../../../global/state_notifier.dart';
 import 'sign_in_state.dart';
 
-class SignInController extends ChangeNotifier {
-  SignInState _state = SignInState();
+class SignInController extends StateNotifier<SignInState> {
+  SignInController(
+    super.state, {
+    required this.authRepository,
+  });
 
-  SignInState get state => _state;
-
-  bool get mount => _mount;
-  bool _mount = true;
+  final AuthRepository authRepository;
   void onUserNameChanged(String text) {
-    _state = state.copyWith(
-      username: text.trim().toLowerCase(),
+    onlyUpdate(
+      state.copyWith(
+        username: text.trim().toLowerCase(),
+      ),
     );
-    notifyListeners();
   }
 
   void onUserPasswordChanged(String text) {
-    _state = state.copyWith(
-      password: text.replaceAll(' ', ''),
+    onlyUpdate(
+      state.copyWith(
+        password: text.replaceAll(' ', ''),
+      ),
     );
-    notifyListeners();
   }
 
-  void onFetchingChanged(bool value) {
-    _state = _state.copyWith(
-      validating: value,
+  Future<Either<SignInFailure, UserModel>> submit() async {
+    state = state.copyWith(
+      validating: true,
     );
-    notifyListeners();
+    final Either<SignInFailure, UserModel> result = await authRepository.signIn(
+      state.username,
+      state.password,
+    );
+    result.when((_) => state = state.copyWith(validating: false), (_) => null);
+
+    return result;
   }
 
   void validate() {}
-  @override
-  void dispose() {
-    _mount = false;
-    super.dispose();
-  }
 }

@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import '../../../../../domain/either.dart';
 import '../../../../../domain/enums.dart';
 import '../../../../../domain/models/user_model.dart';
-import '../../../../../domain/repositories/auth_repository.dart';
 import '../../../../routes/routes.dart';
 import '../../controllers/sign_in_controller.dart';
 
@@ -16,7 +15,7 @@ class SubmitButton extends StatelessWidget {
     final SignInController signInController = context.watch();
     return ChangeNotifierProvider<SignInController>(
       create: (_) => signInController,
-      child: signInController.state.validating == true
+      child: signInController.state.validating
           ? const CircularProgressIndicator()
           : MaterialButton(
               onPressed: () {
@@ -34,13 +33,9 @@ class SubmitButton extends StatelessWidget {
   Future<void> submit(BuildContext context) async {
     final SignInController signInController = context.read();
 
-    signInController.onFetchingChanged(true);
-
     final Either<SignInFailure, UserModel> result =
-        await context.read<AuthRepository>().signIn(
-              signInController.state.username,
-              signInController.state.password,
-            );
+        await signInController.submit();
+
     if (signInController.mount == false) {
       return;
     }
@@ -54,7 +49,6 @@ class SubmitButton extends StatelessWidget {
             }[failure] ??
             'Absolutely unknow';
 
-        signInController.onFetchingChanged(false);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(error),
