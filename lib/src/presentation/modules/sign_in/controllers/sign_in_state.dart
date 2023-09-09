@@ -1,5 +1,8 @@
+import 'package:flutter/foundation.dart';
+
+@immutable
 class SignInState {
-  SignInState({
+  const SignInState({
     this.username = '',
     this.password = '',
     this.validating = false,
@@ -8,6 +11,7 @@ class SignInState {
   final String username;
   final String password;
   final bool validating;
+
   SignInState copyWith({
     String? username,
     String? password,
@@ -18,5 +22,17 @@ class SignInState {
       password: password ?? this.password,
       validating: validating ?? this.validating,
     );
+  }
+
+  @override
+  int get hashCode => '$username$password$validating'.hashCode;
+
+  @override
+  bool operator ==(Object other) {
+    return (identical(this, other)) ||
+        other is SignInState &&
+            username == other.username &&
+            password == other.password &&
+            validating == other.validating;
   }
 }
