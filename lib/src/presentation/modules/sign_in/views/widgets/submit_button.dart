@@ -16,7 +16,7 @@ class SubmitButton extends StatelessWidget {
     final SignInController signInController = context.watch();
     return ChangeNotifierProvider<SignInController>(
       create: (_) => signInController,
-      child: signInController.validating == true
+      child: signInController.state.validating == true
           ? const CircularProgressIndicator()
           : MaterialButton(
               onPressed: () {
@@ -38,8 +38,8 @@ class SubmitButton extends StatelessWidget {
 
     final Either<SignInFailure, UserModel> result =
         await context.read<AuthRepository>().signIn(
-              signInController.username,
-              signInController.password,
+              signInController.state.username,
+              signInController.state.password,
             );
     if (signInController.mount == false) {
       return;

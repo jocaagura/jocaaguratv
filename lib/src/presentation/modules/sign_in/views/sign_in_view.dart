@@ -21,12 +21,12 @@ class SignInView extends StatelessWidget {
                   final SignInController signInController =
                       Provider.of(context, listen: true);
                   return AbsorbPointer(
-                    absorbing: signInController.validating,
+                    absorbing: signInController.state.validating,
                     child: Column(
                       children: <Widget>[
-                        Text('Nombre: ${signInController.username}'),
+                        Text('Nombre: ${signInController.state.username}'),
                         Text(
-                          'Password: ${signInController.password.replaceAll(
+                          'Password: ${signInController.state.password.replaceAll(
                             RegExp(r'.'),
                             '*',
                           )}',
@@ -40,7 +40,7 @@ class SignInView extends StatelessWidget {
                           onChanged: signInController.onUserNameChanged,
                           validator: (String? text) {
                             if (text != null) {
-                              if (signInController.username.isEmpty) {
+                              if (signInController.state.username.isEmpty) {
                                 return 'Escriba un nombre de usuario';
                               }
                             }
@@ -60,7 +60,7 @@ class SignInView extends StatelessWidget {
                           onChanged: signInController.onUserPasswordChanged,
                           validator: (String? text) {
                             if (text != null) {
-                              if (signInController.password.length < 4) {
+                              if (signInController.state.password.length < 4) {
                                 return 'Password invalido';
                               }
                             }
