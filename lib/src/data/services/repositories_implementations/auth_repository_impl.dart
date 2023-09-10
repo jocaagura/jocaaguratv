@@ -1,34 +1,24 @@
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
 import '../../../domain/either.dart';
 import '../../../domain/enums.dart';
 import '../../../domain/models/user_model.dart';
 import '../../../domain/repositories/auth_repository.dart';
+import '../local/session_service.dart';
+import '../remote/account_api.dart';
 import '../remote/auth_api.dart';
-
-const String _key = 'jocaaguratvsesionid';
 
 class AuthRepositoryImpl implements AuthRepository {
   const AuthRepositoryImpl(
-    this._securedStorage,
+    this._sessionService,
     this._authApi,
+    this._accountApi,
   );
-  final FlutterSecureStorage _securedStorage;
+  final SessionService _sessionService;
   final AuthApi _authApi;
-  @override
-  Future<UserModel?> getUserData() async {
-    final String? sesionId = await _securedStorage.read(key: _key);
-    if (sesionId != null) {
-      // TODO(jocaagura): Generar codigo para la recuperacion del usuario
-
-      return UserModel();
-    }
-    return Future<UserModel?>.value();
-  }
+  final AccountApi _accountApi;
 
   @override
   Future<bool> get hasActiveSesion async {
-    final String? sesionId = await _securedStorage.read(key: _key);
+    final String? sesionId = await _sessionService.sessionId;
     if (sesionId != null) {
       return true;
     }
@@ -66,21 +56,20 @@ class AuthRepositoryImpl implements AuthRepository {
           await _authApi.createSession(newRequestToken);
       return sesionResult.when((SignInFailure signInFailure) {
         return Left<SignInFailure, UserModel>(signInFailure);
-      }, (String sesionToken) {
-        _securedStorage.write(
-          key: _key,
-          value: sesionToken,
-        );
-        return Right<SignInFailure, UserModel>(
-          // TODO(jocaagura): Completar el modelo usuario
-          UserModel(),
-        );
+      }, (String sesionToken) async {
+        await _sessionService.saveSessionId(sesionToken);
+        final UserModel? userModel = await _accountApi.getAccount(sesionToken);
+        if (userModel == null) {
+          return const Left<SignInFailure, UserModel>(SignInFailure.unknow);
+        } else {
+          return Right<SignInFailure, UserModel>(userModel);
+        }
       });
     });
   }
 
   @override
   Future<void> signOut() async {
-    await _securedStorage.delete(key: _key);
+    return _sessionService.deleteSesion();
   }
 }

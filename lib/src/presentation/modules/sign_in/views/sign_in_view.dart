@@ -24,7 +24,6 @@ class SignInView extends StatelessWidget {
                 builder: (BuildContext context) {
                   final SignInController signInController =
                       Provider.of(context, listen: true);
-                  print('🤦‍♀️ Aqui si ${signInController.state.validating}');
                   return AbsorbPointer(
                     absorbing: signInController.state.validating,
                     child: Column(

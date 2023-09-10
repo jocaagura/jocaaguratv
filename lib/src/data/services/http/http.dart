@@ -7,6 +7,9 @@ import 'package:http/http.dart' as http;
 import '../../../domain/either.dart';
 
 const String kApiKey = 'df3952a67d9b47d7968f2d67a4d2f2a2';
+const Map<String, String> kQueryParameters = <String, String>{
+  'api_key': kApiKey,
+};
 
 class Http {
   Http(
@@ -23,9 +26,7 @@ class Http {
     Map<String, String> headers = const <String, String>{
       'Content-type': 'application/json',
     },
-    Map<String, String> queryParameters = const <String, String>{
-      'api_key': kApiKey,
-    },
+    Map<String, String> queryParameters = kQueryParameters,
     Map<String, dynamic> body = const <String, dynamic>{},
   }) async {
     late final http.Response response;

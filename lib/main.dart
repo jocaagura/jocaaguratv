@@ -5,6 +5,8 @@ import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
 import 'src/data/services/http/http.dart';
+import 'src/data/services/local/session_service.dart';
+import 'src/data/services/remote/account_api.dart';
 import 'src/data/services/remote/auth_api.dart';
 import 'src/data/services/remote/internet_checker.dart';
 import 'src/data/services/repositories_implementations/account_repository_impl.dart';
@@ -16,11 +18,20 @@ import 'src/domain/repositories/connectivity_repository.dart';
 import 'src/my_app.dart';
 
 void main() {
+  const SessionService sessionService = SessionService(FlutterSecureStorage());
+  final Http httpImpl = Http(
+    kBaseUrl,
+    http.Client(),
+  );
+  final AccountApi accountApi = AccountApi(httpImpl);
   runApp(
     MultiProvider(
       providers: <Provider<dynamic>>[
         Provider<AccountRepository>(
-          create: (_) => const AccountRepositoryImpl(),
+          create: (_) => AccountRepositoryImpl(
+            accountApi,
+            sessionService,
+          ),
         ),
         Provider<ConnectivityRepository>(
           create: (_) {
@@ -32,13 +43,11 @@ void main() {
         ),
         Provider<AuthRepository>(
           create: (_) => AuthRepositoryImpl(
-            const FlutterSecureStorage(),
+            sessionService,
             AuthApi(
-              Http(
-                kBaseUrl,
-                http.Client(),
-              ),
+              httpImpl,
             ),
+            accountApi,
           ),
         ),
       ],

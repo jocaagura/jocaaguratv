@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../domain/models/user_model.dart';
+import '../../../../domain/repositories/account_repository.dart';
 import '../../../../domain/repositories/auth_repository.dart';
 import '../../../../domain/repositories/connectivity_repository.dart';
 import '../../../routes/routes.dart';
@@ -25,11 +26,12 @@ class _SplashViewState extends State<SplashView> {
   Future<void> _init() async {
     final ConnectivityRepository connectivityRepository = context.read();
     final AuthRepository auth = context.read();
+    final AccountRepository accountRepository = context.read();
 
     final bool hasInternet = await connectivityRepository.hasInternet;
     if (hasInternet) {
       if (await auth.hasActiveSesion && mounted) {
-        final UserModel? userModel = await auth.getUserData();
+        final UserModel? userModel = await accountRepository.getUserData();
         if (userModel == null) {
           _goTo(Routes.signIn);
         } else {
