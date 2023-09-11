@@ -11,25 +11,12 @@ class UserModel {
     required this.username,
     this.avatarPath,
   });
-  // factory UserModel.fromJson(Map<String, dynamic> json) =>
-  //     _$UserModelFromJson(json);
-
-  factory UserModel.fromJson(Map<String, dynamic> json) {
-    String? avatar;
-    try {
-      avatar = json['avatar']?['tmdb']?['avatar_path'] as String?;
-    } catch (e) {
-      avatar = 'error';
-    }
-    return UserModel(
-      username: json['username'].toString(),
-      id: int.tryParse(json['id'].toString()) ?? 0,
-      avatarPath: avatar,
-    );
-  }
+  factory UserModel.fromJson(Map<String, dynamic> json) =>
+      _$UserModelFromJson(json);
 
   final int id;
   final String username;
+  @JsonKey(name: 'avatar', fromJson: avatarPathFromJson)
   final String? avatarPath;
 
   @override
@@ -57,4 +44,8 @@ class UserModel {
   }
 
   Map<String, dynamic> toJson() => _$UserModelToJson(this);
+}
+
+String? avatarPathFromJson(Map<String, dynamic> json) {
+  return json['tmdb']?['avatar_path'] as String?;
 }
