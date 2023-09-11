@@ -2,6 +2,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:nested/nested.dart';
 import 'package:provider/provider.dart';
 
 import 'src/data/services/http/http.dart';
@@ -16,6 +17,7 @@ import 'src/domain/repositories/account_repository.dart';
 import 'src/domain/repositories/auth_repository.dart';
 import 'src/domain/repositories/connectivity_repository.dart';
 import 'src/my_app.dart';
+import 'src/presentation/global/controllers/session_controller.dart';
 
 void main() {
   const SessionService sessionService = SessionService(FlutterSecureStorage());
@@ -26,7 +28,7 @@ void main() {
   final AccountApi accountApi = AccountApi(httpImpl);
   runApp(
     MultiProvider(
-      providers: <Provider<dynamic>>[
+      providers: <SingleChildWidget>[
         Provider<AccountRepository>(
           create: (_) => AccountRepositoryImpl(
             accountApi,
@@ -49,6 +51,9 @@ void main() {
             ),
             accountApi,
           ),
+        ),
+        ChangeNotifierProvider<SessionController>(
+          create: (_) => SessionController(),
         ),
       ],
       child: const MyApp(),
