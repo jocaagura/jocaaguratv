@@ -15,6 +15,11 @@ class HomeView extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Text(sessionController.state?.id.toString() ?? ''),
+          Text(sessionController.state?.avatarPath.toString() ?? ''),
+          if (sessionController.state?.avatarPath != null &&
+              sessionController.state?.avatarPath != 'error')
+            Image.network(
+                'https://image.tmdb.org/t/p/w500${sessionController.state?.avatarPath}'),
           Text(sessionController.state?.username ?? ''),
           MaterialButton(
             color: Theme.of(context).colorScheme.error,
