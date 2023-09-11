@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../domain/repositories/auth_repository.dart';
+import '../../../global/controllers/session_controller.dart';
 import '../../../routes/routes.dart';
 
 class HomeView extends StatelessWidget {
@@ -9,24 +9,24 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final SessionController sessionController = context.watch();
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text('Home'),
-            MaterialButton(
-              color: Theme.of(context).colorScheme.error,
-              child: const Text('Cerrar sesion'),
-              onPressed: () {
-                context.read<AuthRepository>().signOut();
-                Navigator.of(context).pushReplacementNamed(
-                  Routes.splash,
-                );
-              },
-            ),
-          ],
-        ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(sessionController.state?.id.toString() ?? ''),
+          Text(sessionController.state?.username ?? ''),
+          MaterialButton(
+            color: Theme.of(context).colorScheme.error,
+            child: const Text('Cerrar sesion'),
+            onPressed: () {
+              sessionController.signOut();
+              Navigator.of(context).pushReplacementNamed(
+                Routes.splash,
+              );
+            },
+          ),
+        ],
       ),
     );
   }

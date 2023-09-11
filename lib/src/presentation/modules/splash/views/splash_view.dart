@@ -5,6 +5,7 @@ import '../../../../domain/models/user_model.dart';
 import '../../../../domain/repositories/account_repository.dart';
 import '../../../../domain/repositories/auth_repository.dart';
 import '../../../../domain/repositories/connectivity_repository.dart';
+import '../../../global/controllers/session_controller.dart';
 import '../../../routes/routes.dart';
 
 class SplashView extends StatefulWidget {
@@ -24,24 +25,29 @@ class _SplashViewState extends State<SplashView> {
   }
 
   Future<void> _init() async {
-    final ConnectivityRepository connectivityRepository = context.read();
-    final AuthRepository auth = context.read();
-    final AccountRepository accountRepository = context.read();
+    final String routeName = await () async {
+      final ConnectivityRepository connectivityRepository = context.read();
+      final AuthRepository auth = context.read();
+      final AccountRepository accountRepository = context.read();
+      final bool hasInternet = await connectivityRepository.hasInternet;
+      final SessionController sessionController = context.read();
 
-    final bool hasInternet = await connectivityRepository.hasInternet;
-    if (hasInternet) {
-      if (await auth.hasActiveSesion && mounted) {
-        final UserModel? userModel = await accountRepository.getUserData();
-        if (userModel == null) {
-          _goTo(Routes.signIn);
-        } else {
-          _goTo(Routes.home);
-        }
-      } else if (mounted) {
-        _goTo(Routes.signIn);
+      if (!hasInternet) {
+        return Routes.offline;
       }
-    } else {
-      _goTo(Routes.offline);
+      final bool isSignedIn = await auth.hasActiveSesion;
+      if (!isSignedIn) {
+        return Routes.signIn;
+      }
+      final UserModel? userModel = await accountRepository.getUserData();
+      if (userModel != null) {
+        sessionController.state = userModel;
+        return Routes.home;
+      }
+      return Routes.signIn;
+    }();
+    if (mounted) {
+      _goTo(routeName);
     }
   }
 
