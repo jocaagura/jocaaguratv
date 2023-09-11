@@ -3,7 +3,7 @@ import '../../../../domain/enums.dart';
 import '../../../../domain/models/user/user_model.dart';
 import '../../../../domain/repositories/auth_repository.dart';
 import '../../../global/state_notifier.dart';
-import 'sign_in_state.dart';
+import 'state/sign_in_state.dart';
 
 class SignInController extends StateNotifier<SignInState> {
   SignInController(

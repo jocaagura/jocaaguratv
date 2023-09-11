@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../controllers/sign_in_controller.dart';
-import '../controllers/sign_in_state.dart';
+import '../controllers/state/sign_in_state.dart';
 import 'widgets/submit_button.dart';
 
 class SignInView extends StatelessWidget {
