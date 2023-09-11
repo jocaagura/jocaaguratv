@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../../domain/either.dart';
 import '../../../../../domain/enums.dart';
-import '../../../../../domain/models/user_model.dart';
+import '../../../../../domain/models/user/user_model.dart';
 import '../../../../global/controllers/session_controller.dart';
 import '../../../../routes/routes.dart';
 import '../../controllers/sign_in_controller.dart';

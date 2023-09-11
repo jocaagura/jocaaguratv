@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../domain/models/user_model.dart';
+import '../../../../domain/models/user/user_model.dart';
 import '../../../../domain/repositories/account_repository.dart';
 import '../../../../domain/repositories/auth_repository.dart';
 import '../../../../domain/repositories/connectivity_repository.dart';

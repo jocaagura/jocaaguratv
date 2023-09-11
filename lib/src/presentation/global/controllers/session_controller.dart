@@ -1,4 +1,4 @@
-import '../../../domain/models/user_model.dart';
+import '../../../domain/models/user/user_model.dart';
 import '../../../domain/repositories/auth_repository.dart';
 import '../state_notifier.dart';
 

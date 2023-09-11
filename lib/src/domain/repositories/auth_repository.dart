@@ -1,6 +1,6 @@
 import '../either.dart';
 import '../enums.dart';
-import '../models/user_model.dart';
+import '../models/user/user_model.dart';
 
 abstract class AuthRepository {
   Future<bool> get hasActiveSesion;

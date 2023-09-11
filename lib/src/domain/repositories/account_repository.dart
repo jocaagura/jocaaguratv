@@ -1,4 +1,4 @@
-import '../models/user_model.dart';
+import '../models/user/user_model.dart';
 
 abstract class AccountRepository {
   const AccountRepository();

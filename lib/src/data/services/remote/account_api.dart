@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import '../../../domain/either.dart';
-import '../../../domain/models/user_model.dart';
+import '../../../domain/models/user/user_model.dart';
 import '../http/http.dart';
 
 class AccountApi {

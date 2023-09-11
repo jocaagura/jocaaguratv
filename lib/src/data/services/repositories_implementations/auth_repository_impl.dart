@@ -1,6 +1,6 @@
 import '../../../domain/either.dart';
 import '../../../domain/enums.dart';
-import '../../../domain/models/user_model.dart';
+import '../../../domain/models/user/user_model.dart';
 import '../../../domain/repositories/auth_repository.dart';
 import '../local/session_service.dart';
 import '../remote/account_api.dart';

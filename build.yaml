@@ -4,4 +4,5 @@ targets:
       json_serializable:
         generate_for:
           include:
+            - lib/src/domain/models/**/*
             - lib/src/domain/models/*
