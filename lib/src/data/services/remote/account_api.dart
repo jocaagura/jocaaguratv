@@ -21,10 +21,7 @@ class AccountApi {
           jsonDecode(responseBody) as Map<dynamic, dynamic>,
         );
 
-        return UserModel(
-          id: int.tryParse(json['id'].toString()) ?? 0,
-          username: json['username'].toString(),
-        );
+        return UserModel.fromJson(json);
       },
     );
     return result.when((_) => null, (UserModel user) => user);
