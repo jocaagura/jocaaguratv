@@ -8,7 +8,6 @@ part 'user_model.g.dart';
 @immutable
 @freezed
 class UserModel with _$UserModel {
-  const UserModel._();
   const factory UserModel({
     required int id,
     required String username,
@@ -16,6 +15,7 @@ class UserModel with _$UserModel {
     ///
     @JsonKey(name: 'avatar', fromJson: avatarPathFromJson) String? avatarPath,
   }) = _UserModel;
+  const UserModel._();
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
       _$UserModelFromJson(json);
