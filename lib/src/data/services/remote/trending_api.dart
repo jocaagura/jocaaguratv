@@ -17,7 +17,8 @@ class TrendingApi {
   final Http _http;
 
   Future<Either<HttpFailure, List<MediaModel>>> getMoviesSeries(
-      TimeWindow timeWindow) {
+    TimeWindow timeWindow,
+  ) {
     return _http.request(
       '3/trending/all/${timeWindow.name}',
       onSuccess: (String json) {
