@@ -8,6 +8,7 @@ part 'user_model.g.dart';
 @immutable
 @freezed
 class UserModel with _$UserModel {
+  const UserModel._();
   const factory UserModel({
     required int id,
     required String username,

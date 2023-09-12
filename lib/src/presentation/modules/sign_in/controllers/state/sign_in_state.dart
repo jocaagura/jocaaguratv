@@ -6,8 +6,8 @@ part 'sign_in_state.freezed.dart';
 @immutable
 class SignInState with _$SignInState {
   const factory SignInState({
-    required String username,
-    required String password,
-    required bool validating,
+    @Default('') String username,
+    @Default('') String password,
+    @Default(false) bool validating,
   }) = _SignInState;
 }
