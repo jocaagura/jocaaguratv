@@ -80,6 +80,11 @@ class AuthApi {
     }
     switch (httpFailure.statusCode) {
       case 401:
+        if (httpFailure.data is Map) {
+          return const Left<SignInFailure, String>(
+            SignInFailure.emailNotVerified,
+          );
+        }
         return const Left<SignInFailure, String>(SignInFailure.unauthorized);
       case 404:
         return const Left<SignInFailure, String>(SignInFailure.notFound);

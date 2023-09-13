@@ -6,8 +6,11 @@ targets:
           include:
             - lib/src/domain/models/**/*
             - lib/src/domain/models/*
+            - lib/src/domain/failures/**/*
+            - lib/src/domain/failures/*
       freezed:
         generate_for:
           include:
             - lib/src/presentation/**/**_state.dart
             - lib/src/domain/models/**/*
+            - lib/src/domain/failures/**/*

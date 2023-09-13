@@ -85,6 +85,7 @@ class Http {
       return Left<HttpFailure, R>(
         HttpFailure(
           statusCode: response.statusCode,
+          data: response.body,
         ),
       );
     } catch (e, stackTrace) {
@@ -117,10 +118,12 @@ class HttpFailure {
   HttpFailure({
     this.statusCode,
     this.exception,
+    this.data,
   });
 
   final int? statusCode;
   final Object? exception;
+  final Object? data;
 }
 
 class NetworkException {}

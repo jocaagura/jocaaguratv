@@ -47,6 +47,7 @@ class SubmitButton extends StatelessWidget {
               SignInFailure.unauthorized: 'Unauthorized',
               SignInFailure.unknow: 'Unknow',
               SignInFailure.network: 'Network error',
+              SignInFailure.emailNotVerified: 'Email not verified',
             }[failure] ??
             'Absolutely unknow';
 
