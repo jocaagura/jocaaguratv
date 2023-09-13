@@ -25,9 +25,12 @@ class TrendingApi {
       '3/trending/all/${timeWindow.name}',
       onSuccess: (String json) {
         final Json jsonB = jsonDecode(json) as Json;
-        final List<Json> list = jsonB['result'] as List<Json>;
+        final List<Json> list =
+            List<Json>.from(jsonB['results'] as Iterable<dynamic>);
         return list
-            .where((Json e) => e['media_Type'] != 'person')
+            .where(
+              (Json e) => e['media_Type'] != 'person' && e['title'] != null,
+            )
             .map((Json item) => MediaModel.fromJson(item))
             .toList();
       },
