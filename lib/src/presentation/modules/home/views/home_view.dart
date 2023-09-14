@@ -9,7 +9,9 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: Column(
-        children: <Widget>[TrendingListWidget()],
+        children: <Widget>[
+          TrendingListWidget(),
+        ],
       ),
     );
   }
