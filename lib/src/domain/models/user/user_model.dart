@@ -22,5 +22,9 @@ class UserModel with _$UserModel {
 }
 
 String? avatarPathFromJson(Map<String, dynamic> json) {
-  return json['tmdb']?['avatar_path'] as String?;
+  if (json['tmdb'] != null && json['tmdb'] is Map) {
+    final Map<String, dynamic> first = json['tmdb'] as Map<String, dynamic>;
+    return first['avatar_path'] as String?;
+  }
+  return null;
 }
