@@ -6,6 +6,7 @@ import '../../../../../domain/enums.dart';
 import '../../../../../domain/failures/http_requets/http_request_failure.dart';
 import '../../../../../domain/models/media/media_model.dart';
 import '../../../../../domain/repositories/trending_repository.dart';
+import '../../../../global/utils/get_umage_url.dart';
 
 class TrendingListWidget extends StatefulWidget {
   const TrendingListWidget({super.key});
@@ -33,10 +34,23 @@ class _TrendingListWidgetState extends State<TrendingListWidget> {
           _,
           AsyncSnapshot<Either<HttpRequestFailure, List<MediaModel>>> snapshot,
         ) {
-          final Text? result = snapshot.data?.when(
+          final Widget? result = snapshot.data?.when(
             (HttpRequestFailure httpRequestFailure) =>
                 Text(httpRequestFailure.toString()),
-            (List<MediaModel> p0) => Text('$p0'),
+            (List<MediaModel> list) {
+              return ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (_, int index) {
+                  final MediaModel mediaModel = list[index];
+                  return Image.network(
+                    getImageUrl(
+                      mediaModel.posterPath,
+                    ),
+                  );
+                },
+                itemCount: list.length,
+              );
+            },
           );
 
           return result ?? const CircularProgressIndicator();
