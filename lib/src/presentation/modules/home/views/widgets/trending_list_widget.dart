@@ -45,6 +45,9 @@ class _TrendingListWidgetState extends State<TrendingListWidget> {
             ],
           ),
         ),
+        const SizedBox(
+          height: 10.0,
+        ),
         TrendingCarrouselWidget(futureListMediaModel: futureListMediaModel),
       ],
     );

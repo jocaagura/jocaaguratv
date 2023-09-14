@@ -33,9 +33,30 @@ class TrendingTileWidget extends StatelessWidget {
             Positioned(
               right: 5.0,
               top: 10.0,
-              child: Chip(
-                label: Text(
-                  mediaModel.voteAverage.toStringAsFixed(1),
+              child: Opacity(
+                opacity: 0.55,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    Chip(
+                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      label: Text(
+                        mediaModel.voteAverage.toStringAsFixed(1),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 4.0,
+                    ),
+                    Chip(
+                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      label: Icon(
+                        mediaModel.type == MediaType.movie
+                            ? Icons.movie
+                            : Icons.tv,
+                        size: 16.0,
+                      ),
+                    )
+                  ],
                 ),
               ),
             ),

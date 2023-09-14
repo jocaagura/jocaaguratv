@@ -10,6 +10,9 @@ class HomeView extends StatelessWidget {
     return const Scaffold(
       body: Column(
         children: <Widget>[
+          SizedBox(
+            height: 10.0,
+          ),
           TrendingListWidget(),
         ],
       ),
