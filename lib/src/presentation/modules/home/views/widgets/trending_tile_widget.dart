@@ -1,3 +1,4 @@
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../domain/models/media/media_model.dart';
@@ -22,13 +23,20 @@ class TrendingTileWidget extends StatelessWidget {
         height: size.height,
         child: Stack(
           children: <Widget>[
-            ClipRRect(
-              borderRadius: BorderRadius.circular(5.0),
-              child: Image.network(
-                getImageUrl(
-                  mediaModel.posterPath,
-                ),
+            ExtendedImage.network(
+              getImageUrl(
+                mediaModel.posterPath,
               ),
+              fit: BoxFit.cover,
+              borderRadius: BorderRadius.circular(5.0),
+              loadStateChanged: (ExtendedImageState state) {
+                if (state.extendedImageLoadState == LoadState.loading) {
+                  return const CircularProgressIndicator(
+                    color: Colors.black,
+                  );
+                }
+                return state.completedWidget;
+              },
             ),
             Positioned(
               right: 5.0,

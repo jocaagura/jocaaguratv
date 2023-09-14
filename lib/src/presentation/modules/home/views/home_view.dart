@@ -8,14 +8,16 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Column(
-        children: <Widget>[
-          _SeparatorWidget(),
-          TrendingListWidget(),
-          _SeparatorWidget(),
-          TrendingPerformersWidget(),
-        ],
+    return const SafeArea(
+      child: Scaffold(
+        body: Column(
+          children: <Widget>[
+            _SeparatorWidget(),
+            TrendingListWidget(),
+            _SeparatorWidget(),
+            Expanded(child: TrendingPerformersWidget()),
+          ],
+        ),
       ),
     );
   }

@@ -5,6 +5,7 @@ import '../../../../../domain/either.dart';
 import '../../../../../domain/failures/http_requets/http_request_failure.dart';
 import '../../../../../domain/models/performer/performer.dart';
 import '../../../../../domain/repositories/trending_repository.dart';
+import 'trending_performers_carrousel_widget.dart';
 
 class TrendingPerformersWidget extends StatefulWidget {
   const TrendingPerformersWidget({super.key});
@@ -26,46 +27,26 @@ class _TrendingPerformersWidgetState extends State<TrendingPerformersWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.red,
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * 0.4,
-      child: FutureBuilder<Either<HttpRequestFailure, List<PerformerModel>>>(
-        future: futureListPerformer,
-        builder: (
-          _,
-          AsyncSnapshot<Either<HttpRequestFailure, List<PerformerModel>>>
-              snapshot,
-        ) {
-          if (snapshot.hasData) {
-            return snapshot.data?.when(
-                  (HttpRequestFailure p0) => Text('Error $p0'),
-                  (List<PerformerModel> p0) =>
-                      TrendingPerformersCarrouselWidget(
-                    listOfPerformers: p0,
-                  ),
-                ) ??
-                const Center(
-                  child: Text('No data'),
-                );
-          }
-          return const CircularProgressIndicator();
-        },
-      ),
+    return FutureBuilder<Either<HttpRequestFailure, List<PerformerModel>>>(
+      future: futureListPerformer,
+      builder: (
+        _,
+        AsyncSnapshot<Either<HttpRequestFailure, List<PerformerModel>>>
+            snapshot,
+      ) {
+        if (snapshot.hasData) {
+          return snapshot.data?.when(
+                (HttpRequestFailure p0) => Text('Error $p0'),
+                (List<PerformerModel> p0) => TrendingPerformersCarrouselWidget(
+                  listOfPerformers: p0,
+                ),
+              ) ??
+              const Center(
+                child: Text('No data'),
+              );
+        }
+        return const CircularProgressIndicator();
+      },
     );
-  }
-}
-
-class TrendingPerformersCarrouselWidget extends StatelessWidget {
-  const TrendingPerformersCarrouselWidget({
-    required this.listOfPerformers,
-    super.key,
-  });
-
-  final List<PerformerModel> listOfPerformers;
-
-  @override
-  Widget build(BuildContext context) {
-    return Text('Actores ${listOfPerformers.length}');
   }
 }
