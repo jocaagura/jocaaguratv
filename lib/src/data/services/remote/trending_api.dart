@@ -29,7 +29,7 @@ class TrendingApi {
             List<Json>.from(jsonB['results'] as Iterable<dynamic>);
         return list
             .where(
-              (Json e) => e['media_Type'] != 'person' && e['title'] != null,
+              (Json e) => e['media_Type'] != 'person',
             )
             .map((Json item) => MediaModel.fromJson(item))
             .toList();
