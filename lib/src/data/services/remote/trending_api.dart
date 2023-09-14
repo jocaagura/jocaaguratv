@@ -4,6 +4,7 @@ import '../../../domain/either.dart';
 import '../../../domain/enums.dart';
 import '../../../domain/failures/http_requets/http_request_failure.dart';
 import '../../../domain/models/media/media_model.dart';
+import '../../../domain/models/performer/performer.dart';
 import '../../../domain/typedefs.dart';
 import '../http/http.dart';
 import '../utils/handle_failure.dart';
@@ -39,6 +40,31 @@ class TrendingApi {
       handleFailure,
       (List<MediaModel> listMedia) =>
           Right<HttpRequestFailure, List<MediaModel>>(listMedia),
+    );
+  }
+
+  Future<Either<HttpRequestFailure, List<PerformerModel>>> getPerformers(
+    TimeWindow timeWindow,
+  ) async {
+    final Either<HttpFailure, List<PerformerModel>> result =
+        await _http.request(
+      '3/trending/person/${timeWindow.name}',
+      onSuccess: (String json) {
+        final Json jsonB = jsonDecode(json) as Json;
+        final List<Json> list =
+            List<Json>.from(jsonB['results'] as Iterable<dynamic>);
+        return list
+            .where(
+              (Json e) => e['known_for_department'] == 'Acting',
+            )
+            .map((Json item) => PerformerModel.fromJson(item))
+            .toList();
+      },
+    );
+    return result.when(
+      handleFailure,
+      (List<PerformerModel> listPerformer) =>
+          Right<HttpRequestFailure, List<PerformerModel>>(listPerformer),
     );
   }
 }

@@ -55,7 +55,7 @@ class TrendingTileWidget extends StatelessWidget {
                             : Icons.tv,
                         size: 16.0,
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
