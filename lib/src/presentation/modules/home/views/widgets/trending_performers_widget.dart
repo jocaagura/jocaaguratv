@@ -29,6 +29,7 @@ class _TrendingPerformersWidgetState extends State<TrendingPerformersWidget> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<Either<HttpRequestFailure, List<PerformerModel>>>(
+      key: ValueKey<dynamic>(futureListPerformer),
       future: futureListPerformer,
       builder: (
         _,
