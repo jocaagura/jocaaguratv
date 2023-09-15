@@ -26,7 +26,7 @@ List<MediaModel> knownForFromJson(List<dynamic> list) {
   return list
       .where(
         (dynamic element) =>
-            (element as Json)['media_type'] == 'person' &&
+            (element as Json)['media_type'] == 'movie' &&
             element['poster_path'] != null &&
             element['backdrop_path'] != null,
       )

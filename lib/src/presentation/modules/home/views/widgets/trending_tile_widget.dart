@@ -8,11 +8,13 @@ class TrendingTileWidget extends StatelessWidget {
   const TrendingTileWidget({
     required this.size,
     required this.mediaModel,
+    this.showData = true,
     super.key,
   });
   final Size size;
 
   final MediaModel mediaModel;
+  final bool showData;
 
   @override
   Widget build(BuildContext context) {
@@ -38,36 +40,37 @@ class TrendingTileWidget extends StatelessWidget {
                 return state.completedWidget;
               },
             ),
-            Positioned(
-              right: 5.0,
-              top: 10.0,
-              child: Opacity(
-                opacity: 0.55,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    Chip(
-                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      label: Text(
-                        mediaModel.voteAverage.toStringAsFixed(1),
+            if (showData)
+              Positioned(
+                right: 5.0,
+                top: 10.0,
+                child: Opacity(
+                  opacity: 0.55,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      Chip(
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        label: Text(
+                          mediaModel.voteAverage.toStringAsFixed(1),
+                        ),
                       ),
-                    ),
-                    const SizedBox(
-                      height: 4.0,
-                    ),
-                    Chip(
-                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      label: Icon(
-                        mediaModel.type == MediaType.movie
-                            ? Icons.movie
-                            : Icons.tv,
-                        size: 16.0,
+                      const SizedBox(
+                        height: 4.0,
                       ),
-                    ),
-                  ],
+                      Chip(
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        label: Icon(
+                          mediaModel.type == MediaType.movie
+                              ? Icons.movie
+                              : Icons.tv,
+                          size: 16.0,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
           ],
         ),
       ),
