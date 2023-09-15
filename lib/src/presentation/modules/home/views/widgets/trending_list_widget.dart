@@ -6,6 +6,7 @@ import '../../../../../domain/enums.dart';
 import '../../../../../domain/failures/http_requets/http_request_failure.dart';
 import '../../../../../domain/models/media/media_model.dart';
 import '../../../../../domain/repositories/trending_repository.dart';
+import '../../../../global/widgets/request_failed_widget.dart';
 import 'title_trending_tile_widget.dart';
 import 'trending_carrousel_widget.dart';
 import 'trending_timewindow_button_widget.dart';
@@ -48,7 +49,16 @@ class _TrendingListWidgetState extends State<TrendingListWidget> {
         const SizedBox(
           height: 10.0,
         ),
-        TrendingCarrouselWidget(futureListMediaModel: futureListMediaModel),
+        TrendingCarrouselWidget(
+          futureListMediaModel: futureListMediaModel,
+          requestFailedWidget: RequestFailedWidget(
+            onRetry: () {
+              setState(() {
+                userTimeWindow(timeWindow);
+              });
+            },
+          ),
+        ),
       ],
     );
   }

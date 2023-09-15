@@ -3,16 +3,19 @@ import 'package:flutter/material.dart';
 import '../../../../../domain/either.dart';
 import '../../../../../domain/failures/http_requets/http_request_failure.dart';
 import '../../../../../domain/models/media/media_model.dart';
+import '../../../../global/widgets/request_failed_widget.dart';
 import 'trending_tile_widget.dart';
 
 class TrendingCarrouselWidget extends StatelessWidget {
   const TrendingCarrouselWidget({
     required this.futureListMediaModel,
+    required this.requestFailedWidget,
     super.key,
   });
 
   final Future<Either<HttpRequestFailure, List<MediaModel>>>
       futureListMediaModel;
+  final RequestFailedWidget requestFailedWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +40,7 @@ class TrendingCarrouselWidget extends StatelessWidget {
               ) {
                 final Widget? result = snapshot.data?.when(
                   (HttpRequestFailure httpRequestFailure) =>
-                      Text(httpRequestFailure.toString()),
+                      requestFailedWidget,
                   (List<MediaModel> list) {
                     return ListView.separated(
                       padding: const EdgeInsets.symmetric(horizontal: 10.0),
