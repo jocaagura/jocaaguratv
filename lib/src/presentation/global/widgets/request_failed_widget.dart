@@ -9,7 +9,8 @@ class RequestFailedWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Theme.of(context).colorScheme.inversePrimary,
+      alignment: Alignment.center,
+      color: Theme.of(context).colorScheme.tertiary,
       child: Column(
         children: <Widget>[
           Text(text ?? 'Request Failed'),
