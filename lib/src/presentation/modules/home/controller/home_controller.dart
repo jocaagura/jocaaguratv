@@ -19,13 +19,10 @@ class HomeController extends StateNotifier<HomeState> {
     );
 
     result.when((HttpRequestFailure p0) {
-      state = state.copyWith(
-        loading: false,
-        moviesAndSeries: null,
-      );
+      state = HomeState.failed(state.timeWindow);
     }, (List<MediaModel> mediaModelList) {
-      state = state.copyWith(
-        loading: false,
+      state = HomeState.loaded(
+        timeWindow: state.timeWindow,
         moviesAndSeries: mediaModelList,
       );
     });
