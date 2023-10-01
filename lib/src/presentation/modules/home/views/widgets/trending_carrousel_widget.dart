@@ -27,7 +27,9 @@ class TrendingCarrouselWidget extends StatelessWidget {
               child: controller.state.moviesAndSeriesState.when(
                 loading: (_) =>
                     const Center(child: CircularProgressIndicator()),
-                failed: (_) => RequestFailedWidget(onRetry: controller.init),
+                failed: (_) => RequestFailedWidget(
+                  onRetry: controller.loadMoviesAndSeries,
+                ),
                 loaded: (
                   _,
                   List<MediaModel> list,

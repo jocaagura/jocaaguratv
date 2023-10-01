@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../../domain/enums.dart';
 import '../../controller/home_controller.dart';
 import 'title_trending_tile_widget.dart';
 import 'trending_carrousel_widget.dart';
@@ -26,9 +25,7 @@ class TrendingListWidget extends StatelessWidget {
             children: <Widget>[
               const TitleTrendingTileWidget(),
               TrendingTimewindowButtonWidget(
-                dropDownFunction: (TimeWindow? timeWindow) {
-                  controller.init();
-                },
+                dropDownFunction: controller.onTimeWindowChanged,
                 timeWindow: controller.state.moviesAndSeriesState.timeWindow,
               ),
             ],

@@ -1,4 +1,5 @@
 import '../../../../domain/either.dart';
+import '../../../../domain/enums.dart';
 import '../../../../domain/failures/http_requets/http_request_failure.dart';
 import '../../../../domain/models/media/media_model.dart';
 import '../../../../domain/models/performer/performer.dart';
@@ -16,6 +17,21 @@ class HomeController extends StateNotifier<HomeState> {
   Future<void> init() async {
     await loadMoviesAndSeries();
     await loadPerformers();
+  }
+
+  void onTimeWindowChanged(TimeWindow? timeWindow) {
+    if (state.moviesAndSeriesState.timeWindow != timeWindow) {
+      // state = state.copyWith(
+      //   moviesAndSeriesState: state.moviesAndSeriesState.l
+      //       .copyWith(timeWindow: timeWindow ?? TimeWindow.day),
+      // );
+      state = state.copyWith(
+        moviesAndSeriesState:
+            MoviesAndSeriesState.loading(timeWindow ?? TimeWindow.day),
+      );
+      loadMoviesAndSeries();
+      loadPerformers();
+    }
   }
 
   Future<void> loadPerformers() async {

@@ -16,7 +16,7 @@ class TrendingPerformersWidget extends StatelessWidget {
       loading: () => const Center(
         child: CircularProgressIndicator(),
       ),
-      failed: () => RequestFailedWidget(onRetry: homeController.init),
+      failed: () => RequestFailedWidget(onRetry: homeController.loadPerformers),
       loaded: (List<PerformerModel> performerList) =>
           TrendingPerformersCarrouselWidget(
         listOfPerformers: performerList,
