@@ -33,10 +33,12 @@ class MediaModel with _$MediaModel {
   factory MediaModel.fromJson(Json json) => _$MediaModelFromJson(json);
 }
 
-Object? readTitleValue(Map<dynamic, dynamic> map, String _) {
-  return map['title'] ?? map['name'] ?? '';
+String readTitleValue(Map<dynamic, dynamic> map, String _) {
+  return map['title']?.toString() ?? map['name']?.toString() ?? '';
 }
 
-Object? readOriginalTitleValue(Map<dynamic, dynamic> map, String _) {
-  return map['original_title'] ?? map['original_name'] ?? '';
+String readOriginalTitleValue(Map<dynamic, dynamic> map, String _) {
+  return map['original_title']?.toString() ??
+      map['original_name']?.toString() ??
+      '';
 }

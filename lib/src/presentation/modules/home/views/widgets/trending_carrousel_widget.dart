@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:jocaaguratv/src/presentation/modules/home/views/widgets/trending_tile_widget.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../domain/models/media/media_model.dart';
 import '../../../../global/widgets/request_failed_widget.dart';
 import '../../controller/home_controller.dart';
+import 'trending_tile_widget.dart';
 
 class TrendingCarrouselWidget extends StatelessWidget {
   const TrendingCarrouselWidget({
@@ -27,7 +27,12 @@ class TrendingCarrouselWidget extends StatelessWidget {
               child: controller.state.when(
                 loading: (_) => const CircularProgressIndicator(),
                 failed: (_) => RequestFailedWidget(onRetry: controller.init),
-                loaded: (_, List<MediaModel> list) => ListView.separated(
+                loaded: (
+                  _,
+                  List<MediaModel> list,
+                  __,
+                ) =>
+                    ListView.separated(
                   padding: const EdgeInsets.symmetric(horizontal: 10.0),
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (_, int index) {
