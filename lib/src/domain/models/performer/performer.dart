@@ -15,7 +15,8 @@ class PerformerModel with _$PerformerModel {
     required String name,
     required double popularity,
     @JsonKey(name: 'original_name') required String originalName,
-    @JsonKey(name: 'profile_path') required String profilePath,
+    @JsonKey(name: 'profile_path', readValue: readProfilePathValue)
+    required String profilePath,
     @JsonKey(name: 'known_for', fromJson: knownForFromJson)
     required List<MediaModel> knownFor,
   }) = _Performer;
@@ -32,4 +33,8 @@ List<MediaModel> knownForFromJson(List<dynamic> list) {
       )
       .map((dynamic e) => MediaModel.fromJson(e as Json))
       .toList();
+}
+
+String readProfilePathValue(Map<dynamic, dynamic> map, String _) {
+  return map['profile_path']?.toString() ?? 'N/A';
 }

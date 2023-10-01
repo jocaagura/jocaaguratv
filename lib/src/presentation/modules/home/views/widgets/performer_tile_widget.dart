@@ -29,8 +29,10 @@ class PerformerTileWidget extends StatelessWidget {
                 fit: BoxFit.cover,
                 loadStateChanged: (ExtendedImageState state) {
                   if (state.extendedImageLoadState == LoadState.loading) {
-                    return const CircularProgressIndicator(
-                      color: Colors.black,
+                    return const Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.black,
+                      ),
                     );
                   }
                   return state.completedWidget;

@@ -25,7 +25,8 @@ class TrendingCarrouselWidget extends StatelessWidget {
             final double width = boxConstraints.maxHeight * 0.65;
             return Center(
               child: controller.state.when(
-                loading: (_) => const CircularProgressIndicator(),
+                loading: (_) =>
+                    const Center(child: CircularProgressIndicator()),
                 failed: (_) => RequestFailedWidget(onRetry: controller.init),
                 loaded: (
                   _,

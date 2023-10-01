@@ -13,7 +13,7 @@ class TrendingPerformersWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final HomeController homeController = context.watch();
     return homeController.state.when(
-      loading: (_) => const CircularProgressIndicator(),
+      loading: (_) => const Center(child: CircularProgressIndicator()),
       failed: (_) => RequestFailedWidget(onRetry: homeController.init),
       loaded: (_, __, List<PerformerModel> performerList) =>
           TrendingPerformersCarrouselWidget(
