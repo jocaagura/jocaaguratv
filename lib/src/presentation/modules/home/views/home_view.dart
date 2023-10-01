@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../domain/enums.dart';
 import '../controller/home_controller.dart';
 import '../controller/state/home_state.dart';
 import 'widgets/trending_list_widget.dart';
@@ -20,7 +19,7 @@ class _HomeViewState extends State<HomeView> {
     return ChangeNotifierProvider<HomeController>(
       create: (_) {
         final HomeController controller = HomeController(
-          HomeState.loading(TimeWindow.day),
+          HomeState(),
           trendingRepository: context.read(),
         );
         controller.init();

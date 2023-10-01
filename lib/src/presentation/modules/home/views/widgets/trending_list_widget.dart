@@ -29,7 +29,7 @@ class TrendingListWidget extends StatelessWidget {
                 dropDownFunction: (TimeWindow? timeWindow) {
                   controller.init();
                 },
-                timeWindow: controller.state.timeWindow,
+                timeWindow: controller.state.moviesAndSeriesState.timeWindow,
               ),
             ],
           ),

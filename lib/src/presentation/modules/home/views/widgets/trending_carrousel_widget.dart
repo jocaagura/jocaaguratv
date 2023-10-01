@@ -24,14 +24,13 @@ class TrendingCarrouselWidget extends StatelessWidget {
           builder: (_, BoxConstraints boxConstraints) {
             final double width = boxConstraints.maxHeight * 0.65;
             return Center(
-              child: controller.state.when(
+              child: controller.state.moviesAndSeriesState.when(
                 loading: (_) =>
                     const Center(child: CircularProgressIndicator()),
                 failed: (_) => RequestFailedWidget(onRetry: controller.init),
                 loaded: (
                   _,
                   List<MediaModel> list,
-                  __,
                 ) =>
                     ListView.separated(
                   padding: const EdgeInsets.symmetric(horizontal: 10.0),

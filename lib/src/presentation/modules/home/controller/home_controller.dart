@@ -14,25 +14,48 @@ class HomeController extends StateNotifier<HomeState> {
   final TrendingRepository trendingRepository;
 
   Future<void> init() async {
-    final Either<HttpRequestFailure, List<MediaModel>> result =
-        await trendingRepository.getMoviesAndSeries(
-      state.timeWindow,
-    );
+    await loadMoviesAndSeries();
+    await loadPerformers();
+  }
+
+  Future<void> loadPerformers() async {
     final Either<HttpRequestFailure, List<PerformerModel>> performerResult =
         await trendingRepository.getPerformers();
-
-    result.when((_) {
-      state = HomeState.failed(state.timeWindow);
-    }, (List<MediaModel> mediaModelList) {
-      performerResult.when((_) {
-        state = HomeState.failed(state.timeWindow);
-      }, (List<PerformerModel> performerList) {
-        state = HomeState.loaded(
-          timeWindow: state.timeWindow,
-          moviesAndSeries: mediaModelList,
-          performerList: performerList,
+    performerResult.when(
+      (_) {
+        return state = state.copyWith(
+          performerModelListState: const PerformerModelListState.failed(),
         );
-      });
-    });
+      },
+      (List<PerformerModel> performerList) {
+        state = state.copyWith(
+          performerModelListState:
+              PerformerModelListState.loaded(performerList),
+        );
+      },
+    );
+  }
+
+  Future<void> loadMoviesAndSeries() async {
+    final Either<HttpRequestFailure, List<MediaModel>> result =
+        await trendingRepository
+            .getMoviesAndSeries(state.moviesAndSeriesState.timeWindow);
+    result.when(
+      (_) {
+        return state = state.copyWith(
+          moviesAndSeriesState: MoviesAndSeriesState.failed(
+            state.moviesAndSeriesState.timeWindow,
+          ),
+        );
+      },
+      (List<MediaModel> mediaModelList) {
+        state = state.copyWith(
+          moviesAndSeriesState: MoviesAndSeriesState.loaded(
+            timeWindow: state.moviesAndSeriesState.timeWindow,
+            moviesAndSeriesList: mediaModelList,
+          ),
+        );
+      },
+    );
   }
 }
