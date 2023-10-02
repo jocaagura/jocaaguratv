@@ -18,12 +18,10 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<HomeController>(
       create: (_) {
-        final HomeController controller = HomeController(
+        return HomeController(
           HomeState(),
           trendingRepository: context.read(),
-        );
-        controller.init();
-        return controller;
+        )..init();
       },
       child: SafeArea(
         child: LayoutBuilder(
