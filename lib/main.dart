@@ -10,14 +10,17 @@ import 'src/data/services/local/session_service.dart';
 import 'src/data/services/remote/account_api.dart';
 import 'src/data/services/remote/auth_api.dart';
 import 'src/data/services/remote/internet_checker.dart';
+import 'src/data/services/remote/movies_api.dart';
 import 'src/data/services/remote/trending_api.dart';
 import 'src/data/services/repositories_implementations/account_repository_impl.dart';
 import 'src/data/services/repositories_implementations/auth_repository_impl.dart';
 import 'src/data/services/repositories_implementations/connectivity_repository_imp.dart';
+import 'src/data/services/repositories_implementations/movies_repository_impl.dart';
 import 'src/data/services/repositories_implementations/trending_repository_impl.dart';
 import 'src/domain/repositories/account_repository.dart';
 import 'src/domain/repositories/auth_repository.dart';
 import 'src/domain/repositories/connectivity_repository.dart';
+import 'src/domain/repositories/movies_repository.dart';
 import 'src/domain/repositories/trending_repository.dart';
 import 'src/my_app.dart';
 import 'src/presentation/global/controllers/session_controller.dart';
@@ -58,6 +61,11 @@ void main() {
         Provider<TrendingRepository>(
           create: (_) => TrendingRepositoryImpl(
             TrendingApi(httpImpl),
+          ),
+        ),
+        Provider<MoviesRepository>(
+          create: (_) => MoviesRepositoryImpl(
+            MoviesApi(httpImpl),
           ),
         ),
         ChangeNotifierProvider<SessionController>(
