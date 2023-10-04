@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../../domain/models/media/media_model.dart';
 import '../../../../global/utils/get_umage_url.dart';
-import '../../../../routes/routes.dart';
+import '../../../movies/views/movie_view.dart';
 
 class TrendingTileWidget extends StatelessWidget {
   const TrendingTileWidget({
@@ -22,19 +22,15 @@ class TrendingTileWidget extends StatelessWidget {
     return InkWell(
       onTap: () {
         if (mediaModel.type == MediaType.movie) {
-          Navigator.pushNamed(
+          Navigator.push(
             context,
-            '${Routes.movie}/${mediaModel.id}',
+            MaterialPageRoute<dynamic>(
+              builder: (_) {
+                return MovieView(movieId: mediaModel.id);
+              },
+              settings: RouteSettings(name: '/movie/${mediaModel.id}'),
+            ),
           );
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute<dynamic>(
-          //     builder: (_) {
-          //       return MovieView(movieId: mediaModel.id);
-          //     },
-          //     settings: RouteSettings(name: '/movie/${mediaModel.id}'),
-          //   ),
-          // );
         }
       },
       child: ClipRRect(
