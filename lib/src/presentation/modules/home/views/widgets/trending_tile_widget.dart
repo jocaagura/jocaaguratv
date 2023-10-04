@@ -24,9 +24,17 @@ class TrendingTileWidget extends StatelessWidget {
         if (mediaModel.type == MediaType.movie) {
           Navigator.pushNamed(
             context,
-            Routes.movie,
-            arguments: mediaModel.id,
+            '${Routes.movie}/${mediaModel.id}',
           );
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute<dynamic>(
+          //     builder: (_) {
+          //       return MovieView(movieId: mediaModel.id);
+          //     },
+          //     settings: RouteSettings(name: '/movie/${mediaModel.id}'),
+          //   ),
+          // );
         }
       },
       child: ClipRRect(

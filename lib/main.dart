@@ -4,6 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:nested/nested.dart';
 import 'package:provider/provider.dart';
+import 'package:url_strategy/url_strategy.dart';
 
 import 'src/data/services/http/http.dart';
 import 'src/data/services/local/session_service.dart';
@@ -26,6 +27,7 @@ import 'src/my_app.dart';
 import 'src/presentation/global/controllers/session_controller.dart';
 
 void main() {
+  setPathUrlStrategy();
   const SessionService sessionService = SessionService(FlutterSecureStorage());
   final Http httpImpl = Http(
     kBaseUrl,
