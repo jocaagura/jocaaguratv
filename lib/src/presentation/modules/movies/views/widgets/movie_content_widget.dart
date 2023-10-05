@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../../domain/models/movie/movie_model.dart';
 import '../../controller/state/movie_state.dart';
+import 'movie_cast_widget.dart';
 import 'movie_header_widget.dart';
 
 class MovieContentWidget extends StatelessWidget {
@@ -31,6 +32,9 @@ class MovieContentWidget extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(movie.overview),
+          ),
+          MovieCastWidget(
+            movieId: movie.id,
           ),
         ],
       ),
