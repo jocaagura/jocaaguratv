@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../routes/routes.dart';
 import '../controller/home_controller.dart';
 import '../controller/state/home_state.dart';
 import 'widgets/trending_list_widget.dart';
@@ -29,6 +30,24 @@ class _HomeViewState extends State<HomeView> {
             return RefreshIndicator(
               onRefresh: () async {},
               child: Scaffold(
+                appBar: AppBar(
+                  backgroundColor: Theme.of(context).canvasColor,
+                  elevation: 1,
+                  actions: <IconButton>[
+                    IconButton(
+                      onPressed: () {
+                        Navigator.pushNamed(
+                          context,
+                          Routes.favorites,
+                        );
+                      },
+                      icon: Icon(
+                        Icons.person,
+                        color: Theme.of(context).primaryColorDark,
+                      ),
+                    ),
+                  ],
+                ),
                 body: SingleChildScrollView(
                   physics: const AlwaysScrollableScrollPhysics(),
                   child: SizedBox(

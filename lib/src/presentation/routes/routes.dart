@@ -5,4 +5,5 @@ class Routes {
   static const String home = '/home';
   static const String offline = '/offline';
   static const String movie = '/movie';
+  static const String favorites = '/favorites';
 }

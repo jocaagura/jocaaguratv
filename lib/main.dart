@@ -24,6 +24,8 @@ import 'src/domain/repositories/connectivity_repository.dart';
 import 'src/domain/repositories/movies_repository.dart';
 import 'src/domain/repositories/trending_repository.dart';
 import 'src/my_app.dart';
+import 'src/presentation/global/controllers/favorites/favorites_controller.dart';
+import 'src/presentation/global/controllers/favorites/state/favorites_state.dart';
 import 'src/presentation/global/controllers/session_controller.dart';
 
 void main() {
@@ -72,6 +74,11 @@ void main() {
         ),
         ChangeNotifierProvider<SessionController>(
           create: (BuildContext context) => SessionController(context.read()),
+        ),
+        ChangeNotifierProvider<FavoritesController>(
+          create: (BuildContext context) => FavoritesController(
+            const FavoritesState.loading(),
+          ),
         ),
       ],
       child: const MyApp(),
