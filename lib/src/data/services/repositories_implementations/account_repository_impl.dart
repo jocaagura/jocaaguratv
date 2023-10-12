@@ -15,9 +15,12 @@ class AccountRepositoryImpl implements AccountRepository {
   @override
   Future<UserModel?> getUserData() async {
     final String? sessionId = await _sessionService.sessionId;
-
     if (sessionId != null) {
-      return _accountApi.getAccount(sessionId);
+      final UserModel? user = await _accountApi.getAccount(sessionId);
+      if (user != null) {
+        _sessionService.saveAccountId(user.id.toString());
+      }
+      return user;
     }
     return Future<UserModel?>.value();
   }

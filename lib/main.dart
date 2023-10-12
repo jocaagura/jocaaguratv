@@ -35,7 +35,10 @@ void main() {
     kBaseUrl,
     http.Client(),
   );
-  final AccountApi accountApi = AccountApi(httpImpl);
+  final AccountApi accountApi = AccountApi(
+    httpImpl,
+    sessionService,
+  );
   runApp(
     MultiProvider(
       providers: <SingleChildWidget>[
