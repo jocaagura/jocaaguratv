@@ -14,6 +14,7 @@ class MovieController extends StateNotifier<MovieState> {
   final MoviesRepository moviesRepository;
   final int movieId;
   Future<void> init() async {
+    state = MovieState.loading();
     final Either<HttpRequestFailure, MovieModel> result =
         await moviesRepository.getMovieById(movieId);
     state = result.when(

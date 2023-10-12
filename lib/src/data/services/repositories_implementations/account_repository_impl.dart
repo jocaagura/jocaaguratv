@@ -1,3 +1,6 @@
+import '../../../domain/either.dart';
+import '../../../domain/failures/http_requets/http_request_failure.dart';
+import '../../../domain/models/media/media_model.dart';
 import '../../../domain/models/user/user_model.dart';
 import '../../../domain/repositories/account_repository.dart';
 import '../local/session_service.dart';
@@ -23,5 +26,12 @@ class AccountRepositoryImpl implements AccountRepository {
       return user;
     }
     return Future<UserModel?>.value();
+  }
+
+  @override
+  Future<Either<HttpRequestFailure, Map<int, MediaModel>>> getFavorites(
+    MediaType mediaType,
+  ) {
+    return _accountApi.getFavorites(mediaType);
   }
 }

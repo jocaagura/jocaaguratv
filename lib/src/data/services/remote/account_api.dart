@@ -44,19 +44,26 @@ class AccountApi {
         await _http.request(
       '3/account/$accountId/favorite/${mediaType == MediaType.movie ? "movies" : "tv"}',
       queryParameters: <String, String>{
+        ...kQueryParameters,
         'session_id': await _sessionService.sessionId ?? '',
       },
       onSuccess: (String responseBody) {
         final Map<String, dynamic> json = Map<String, dynamic>.from(
           jsonDecode(responseBody) as Map<dynamic, dynamic>,
         );
-        final List<Json> list = json['results'] as List<Json>;
+        final Map<int, MediaModel> map = <int, MediaModel>{};
+
+        final List<Json> list = <Json>[];
+        for (final dynamic element in json['results'] as List<dynamic>) {
+          (element as Json)['media_type'] = mediaType.name;
+          list.add(element);
+        }
+
         final Iterable<MapEntry<int, MediaModel>> iterable =
             list.map((Json mediaModelJson) {
           final MediaModel mediaModel = MediaModel.fromJson(mediaModelJson);
           return MapEntry<int, MediaModel>(mediaModel.id, mediaModel);
         });
-        final Map<int, MediaModel> map = <int, MediaModel>{};
         map.addEntries(iterable);
         return map;
       },

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../global/controllers/favorites/favorites_controller.dart';
+import '../../../../global/controllers/favorites/state/favorites_state.dart';
 import '../../controller/movie_controller.dart';
+import '../../controller/state/movie_state.dart';
 
 class AppbarWidget extends StatelessWidget implements PreferredSize {
   const AppbarWidget({super.key});
@@ -9,14 +12,23 @@ class AppbarWidget extends StatelessWidget implements PreferredSize {
   @override
   Widget build(BuildContext context) {
     final MovieController controller = context.watch();
+    final FavoritesController favoritesController = context.watch();
     return AppBar(
       backgroundColor: Colors.transparent,
       actions: controller.state.mapOrNull(
-        loaded: (_) => <Widget>[
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.favorite_outline,
+        loaded: (MovieStateLoaded movieState) => <Widget>[
+          favoritesController.state.maybeMap(
+            orElse: () => Icon(
+              Icons.error,
+              color: Theme.of(context).colorScheme.error,
+            ),
+            loaded: (FavoritesStateLoaded favoriteState) => IconButton(
+              onPressed: () {},
+              icon: Icon(
+                favoriteState.movies.containsKey(movieState.movieModel.id)
+                    ? Icons.favorite
+                    : Icons.favorite_outline,
+              ),
             ),
           ),
         ],

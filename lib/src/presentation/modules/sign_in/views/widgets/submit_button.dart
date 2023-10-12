@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../../../domain/either.dart';
 import '../../../../../domain/enums.dart';
 import '../../../../../domain/models/user/user_model.dart';
+import '../../../../global/controllers/favorites/favorites_controller.dart';
 import '../../../../global/controllers/session_controller.dart';
 import '../../../../routes/routes.dart';
 import '../../controllers/sign_in_controller.dart';
@@ -59,7 +60,9 @@ class SubmitButton extends StatelessWidget {
       },
       (UserModel userModel) {
         final SessionController sessionController = context.read();
+        final FavoritesController favoritesController = context.read();
         sessionController.state = userModel;
+        favoritesController.init();
         Navigator.of(context).pushReplacementNamed(Routes.home);
       },
     );

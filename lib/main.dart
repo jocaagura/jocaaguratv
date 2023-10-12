@@ -81,6 +81,7 @@ void main() {
         ChangeNotifierProvider<FavoritesController>(
           create: (BuildContext context) => FavoritesController(
             const FavoritesState.loading(),
+            accountRepository: context.read(),
           ),
         ),
       ],

@@ -5,6 +5,7 @@ import '../../../../domain/models/user/user_model.dart';
 import '../../../../domain/repositories/account_repository.dart';
 import '../../../../domain/repositories/auth_repository.dart';
 import '../../../../domain/repositories/connectivity_repository.dart';
+import '../../../global/controllers/favorites/favorites_controller.dart';
 import '../../../global/controllers/session_controller.dart';
 import '../../../routes/routes.dart';
 
@@ -29,8 +30,9 @@ class _SplashViewState extends State<SplashView> {
       final ConnectivityRepository connectivityRepository = context.read();
       final AuthRepository auth = context.read();
       final AccountRepository accountRepository = context.read();
-      final bool hasInternet = await connectivityRepository.hasInternet;
       final SessionController sessionController = context.read();
+      final FavoritesController favoritesController = context.read();
+      final bool hasInternet = await connectivityRepository.hasInternet;
 
       if (!hasInternet) {
         return Routes.offline;
@@ -42,6 +44,7 @@ class _SplashViewState extends State<SplashView> {
       final UserModel? userModel = await accountRepository.getUserData();
       if (userModel != null) {
         sessionController.state = userModel;
+        favoritesController.init();
         return Routes.home;
       }
       return Routes.signIn;
