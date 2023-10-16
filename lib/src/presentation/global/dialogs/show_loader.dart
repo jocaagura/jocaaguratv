@@ -4,7 +4,7 @@ Future<T> showLoader<T>(BuildContext context, Future<T> future) async {
   final OverlayState overlayState = Overlay.of(context);
   final OverlayEntry entry = OverlayEntry(
     builder: (BuildContext context) => const ColoredBox(
-      color: Colors.black,
+      color: Colors.black45,
       child: Center(
         child: CircularProgressIndicator(),
       ),
