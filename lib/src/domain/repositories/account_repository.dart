@@ -10,4 +10,10 @@ abstract class AccountRepository {
   Future<Either<HttpRequestFailure, Map<int, MediaModel>>> getFavorites(
     MediaType mediaType,
   );
+
+  Future<Either<HttpRequestFailure, void>> markAsFavorite({
+    required int mediaId,
+    required MediaType mediaType,
+    required bool isFavorite,
+  });
 }

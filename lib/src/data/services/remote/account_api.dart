@@ -74,4 +74,32 @@ class AccountApi {
           Right<HttpRequestFailure, Map<int, MediaModel>>(value),
     );
   }
+
+  Future<Either<HttpRequestFailure, void>> markAsFavorite({
+    required int mediaId,
+    required MediaType mediaType,
+    required bool isFavorite,
+  }) async {
+    final String accountId = await _sessionService.accountId ?? '';
+    final String sessionId = await _sessionService.sessionId ?? '';
+    final Either<HttpFailure, void> result = await _http.request(
+      '3/account/$accountId/favorite',
+      queryParameters: <String, String>{
+        ...kQueryParameters,
+        'session_id': sessionId,
+      },
+      body: <String, dynamic>{
+        'media_type': mediaType.name,
+        'media_id': mediaId,
+        'favorite': isFavorite,
+      },
+      httpMethod: HttpMethod.post,
+      onSuccess: (_) {
+        return;
+      },
+    );
+    return result.when(handleFailure, (_) {
+      return const Right<HttpRequestFailure, void>(null);
+    });
+  }
 }
