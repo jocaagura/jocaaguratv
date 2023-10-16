@@ -27,6 +27,7 @@ import 'src/my_app.dart';
 import 'src/presentation/global/controllers/favorites/favorites_controller.dart';
 import 'src/presentation/global/controllers/favorites/state/favorites_state.dart';
 import 'src/presentation/global/controllers/session_controller.dart';
+import 'src/presentation/global/controllers/theme_controller.dart';
 
 void main() {
   setPathUrlStrategy();
@@ -82,6 +83,11 @@ void main() {
           create: (BuildContext context) => FavoritesController(
             const FavoritesState.loading(),
             accountRepository: context.read(),
+          ),
+        ),
+        ChangeNotifierProvider<ThemeController>(
+          create: (BuildContext context) => ThemeController(
+            false,
           ),
         ),
       ],

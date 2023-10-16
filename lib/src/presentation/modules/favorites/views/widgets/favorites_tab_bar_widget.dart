@@ -10,11 +10,7 @@ class FavoritesTabBarWidget extends StatelessWidget implements PreferredSize {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      elevation: 0,
-      backgroundColor: Theme.of(context).canvasColor,
-      iconTheme: Theme.of(context).iconTheme,
       bottom: TabBar(
-        labelColor: Theme.of(context).primaryColorDark,
         controller: tabController,
         indicator: _Decoration(context),
         //indicator: BoxDecoration(
