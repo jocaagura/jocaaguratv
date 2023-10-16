@@ -9,7 +9,7 @@ part 'movie_model.g.dart';
 
 @freezed
 class MovieModel with _$MovieModel {
-  factory MovieModel({
+  const factory MovieModel({
     required int id,
     required List<GenreModel> genres,
     required int runtime,
@@ -21,5 +21,19 @@ class MovieModel with _$MovieModel {
     @JsonKey(readValue: readOriginalTitleValue) required String originalTitle,
     @JsonKey(name: 'backdrop_path') required String backdropPath,
   }) = _MovieModel;
+  const MovieModel._();
   factory MovieModel.fromJson(Json json) => _$MovieModelFromJson(json);
+
+  MediaModel toMedia() {
+    return MediaModel(
+      id: id,
+      title: title,
+      overview: overview,
+      originalTitle: originalTitle,
+      posterPath: posterPath,
+      backdropPath: backdropPath,
+      voteAverage: voteAverage,
+      type: MediaType.movie,
+    );
+  }
 }

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../global/controllers/favorites/favorites_controller.dart';
 import '../../../../global/controllers/favorites/state/favorites_state.dart';
+import '../../../../global/utils/mark_as_favorite.dart';
 import '../../controller/movie_controller.dart';
 import '../../controller/state/movie_state.dart';
 
@@ -23,7 +24,13 @@ class AppbarWidget extends StatelessWidget implements PreferredSize {
               color: Theme.of(context).colorScheme.error,
             ),
             loaded: (FavoritesStateLoaded favoriteState) => IconButton(
-              onPressed: () {},
+              onPressed: () {
+                markAsFavorite(
+                  context: context,
+                  mediaModel: movieState.movieModel.toMedia(),
+                  mounted: () => controller.mount,
+                );
+              },
               icon: Icon(
                 favoriteState.movies.containsKey(movieState.movieModel.id)
                     ? Icons.favorite
