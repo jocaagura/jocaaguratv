@@ -5,6 +5,7 @@ import '../../../domain/either.dart';
 import '../../../domain/failures/http_requets/http_request_failure.dart';
 import '../../../domain/models/media/media_model.dart';
 import '../controllers/favorites/favorites_controller.dart';
+import '../dialogs/show_loader.dart';
 
 Future<void> markAsFavorite({
   required BuildContext context,
@@ -12,10 +13,13 @@ Future<void> markAsFavorite({
   required bool Function() mounted,
 }) async {
   final FavoritesController favoritesController = context.read();
-  final Either<HttpRequestFailure, void>? result =
-      await favoritesController.markAsFavorite(
-    mediaModel,
+  final Either<HttpRequestFailure, void>? result = await showLoader(
+    context,
+    favoritesController.markAsFavorite(
+      mediaModel,
+    ),
   );
+
   if (mounted()) {
     return;
   }
