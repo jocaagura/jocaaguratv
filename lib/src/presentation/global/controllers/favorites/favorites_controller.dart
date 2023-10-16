@@ -12,6 +12,7 @@ class FavoritesController extends StateNotifier<FavoritesState> {
   });
   final AccountRepository accountRepository;
   Future<void> init() async {
+    state = const FavoritesState.loading();
     final Either<HttpRequestFailure, Map<int, MediaModel>> moviesResult =
         await accountRepository.getFavorites(MediaType.movie);
 
