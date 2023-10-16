@@ -10,4 +10,9 @@ class SessionController extends StateNotifier<UserModel?> {
     await _authRepository.signOut();
     state = null;
   }
+
+  UserModel get user => state ?? const UserModel(id: 0, username: 'anonimo');
+  set user(UserModel user) {
+    state = user;
+  }
 }
