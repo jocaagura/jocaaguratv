@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../../domain/models/media/media_model.dart';
 import '../../../../global/utils/get_umage_url.dart';
-import '../../../movies/views/movie_view.dart';
+import '../../../../utils/go_to_media_details.dart';
 
 class TrendingTileWidget extends StatelessWidget {
   const TrendingTileWidget({
@@ -21,17 +21,7 @@ class TrendingTileWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        if (mediaModel.type == MediaType.movie) {
-          Navigator.push(
-            context,
-            MaterialPageRoute<dynamic>(
-              builder: (_) {
-                return MovieView(movieId: mediaModel.id);
-              },
-              settings: RouteSettings(name: '/movie/${mediaModel.id}'),
-            ),
-          );
-        }
+        goToMediaDetails(context, mediaModel);
       },
       child: ClipRRect(
         borderRadius: BorderRadius.circular(5.0),
