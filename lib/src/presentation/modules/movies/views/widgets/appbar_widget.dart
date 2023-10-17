@@ -15,9 +15,6 @@ class AppbarWidget extends StatelessWidget implements PreferredSize {
     final MovieController controller = context.watch();
     final FavoritesController favoritesController = context.watch();
     return AppBar(
-      iconTheme: Theme.of(context).iconTheme.copyWith(
-            color: Theme.of(context).canvasColor,
-          ),
       backgroundColor: Colors.transparent,
       actions: controller.state.mapOrNull(
         loaded: (MovieStateLoaded movieState) => <Widget>[

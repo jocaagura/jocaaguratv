@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'colors.dart';
 
@@ -7,8 +8,20 @@ ThemeData getTheme(bool isDarkMode) {
       ? ThemeData.dark(
           useMaterial3: true,
         ).copyWith(
+          textTheme: GoogleFonts.nunitoSansTextTheme(
+            ThemeData.dark().textTheme.copyWith(
+                  titleSmall: const TextStyle(
+                    color: Colors.orange,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18.0,
+                  ),
+                ),
+          ),
           appBarTheme: const AppBarTheme(
-            color: AppColors.primaryDark,
+            backgroundColor: AppColors.primaryDark,
+            iconTheme: IconThemeData(
+              color: AppColors.canvasColor,
+            ),
             elevation: 0.0,
           ),
           scaffoldBackgroundColor: AppColors.primaryDarkLight,
@@ -16,6 +29,14 @@ ThemeData getTheme(bool isDarkMode) {
       : ThemeData.light(
           useMaterial3: true,
         ).copyWith(
+          textTheme: GoogleFonts.nunitoSansTextTheme(
+            ThemeData.light().textTheme.copyWith(
+                  titleSmall: const TextStyle(
+                      color: AppColors.canvasColor,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18.0),
+                ),
+          ),
           switchTheme: SwitchThemeData(
             thumbColor:
                 MaterialStateProperty.all<Color>(AppColors.primaryDarkLight),
@@ -25,7 +46,7 @@ ThemeData getTheme(bool isDarkMode) {
             elevation: 0.0,
           ),
           iconTheme: const IconThemeData(
-            color: AppColors.primaryDark,
+            color: AppColors.canvasColor,
           ),
         );
 }

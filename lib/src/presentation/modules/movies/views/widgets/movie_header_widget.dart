@@ -3,19 +3,16 @@ import 'package:flutter/material.dart';
 
 import '../../../../../domain/models/genre_model/genre_model.dart';
 import '../../../../../domain/models/movie/movie_model.dart';
+import '../../../../global/extensions/build_context_ext.dart';
 import '../../../../global/utils/get_umage_url.dart';
 
-class MovieHederWidget extends StatelessWidget {
-  const MovieHederWidget({
+class MovieHeaderWidget extends StatelessWidget {
+  const MovieHeaderWidget({
     required this.movie,
-    required this.textStyle,
-    required this.color,
     super.key,
   });
 
   final MovieModel movie;
-  final TextStyle textStyle;
-  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +60,7 @@ class MovieHederWidget extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         movie.title,
-                        style: textStyle,
+                        style: context.titleSmall,
                       ),
                       const SizedBox(
                         height: 5.0,
@@ -77,12 +74,14 @@ class MovieHederWidget extends StatelessWidget {
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(5.0),
                                   border: Border.all(
-                                    color: color,
+                                    color: context.titleSmall?.color ??
+                                        Theme.of(context).canvasColor,
                                   ),
                                 ),
                                 child: Text(
                                   e.name,
-                                  style: textStyle.copyWith(fontSize: 10.0),
+                                  style: context.titleSmall
+                                      ?.copyWith(fontSize: 10.0),
                                 ),
                               ),
                             )
@@ -103,7 +102,9 @@ class MovieHederWidget extends StatelessWidget {
                     ),
                     Text(
                       movie.voteAverage.toStringAsFixed(1),
-                      style: textStyle.copyWith(fontSize: 24),
+                      style: context.titleSmall?.copyWith(
+                        fontSize: 24,
+                      ),
                     ),
                   ],
                 ),
