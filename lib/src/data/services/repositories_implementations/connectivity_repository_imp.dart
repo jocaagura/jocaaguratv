@@ -1,47 +1,49 @@
+import 'dart:async';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
 
 import '../../../domain/repositories/connectivity_repository.dart';
 import '../remote/internet_checker.dart';
 
 class ConnectivityRepositoryImpl implements ConnectivityRepository {
-  const ConnectivityRepositoryImpl(
+  ConnectivityRepositoryImpl(
     this._connectivity,
     this._internetChecker,
-  );
+  ) {
+    _initializated();
+  }
 
   final Connectivity _connectivity;
   final InternetChecker _internetChecker;
+  final StreamController<bool> _controller = StreamController<bool>.broadcast();
+  bool _hasInternet = false;
 
   @override
-  Future<bool> get hasInternet async {
-    await Future<void>.delayed(
-      const Duration(seconds: 1),
-    );
-    final ConnectivityResult connectivityResult =
-        await _connectivity.checkConnectivity();
-    if (connectivityResult == ConnectivityResult.mobile) {
-      // I am connected to a mobile network.
-    } else if (connectivityResult == ConnectivityResult.wifi) {
-      // I am connected to a wifi network.
-    } else if (connectivityResult == ConnectivityResult.ethernet) {
-      // I am connected to a ethernet network.
-    } else if (connectivityResult == ConnectivityResult.vpn) {
-      // I am connected to a vpn network.
-      // Note for iOS and macOS:
-      // There is no separate network interface type for [vpn].
-      // It returns [other] on any device (also simulator)
-    } else if (connectivityResult == ConnectivityResult.bluetooth) {
-      // I am connected to a bluetooth.
-    } else if (connectivityResult == ConnectivityResult.other) {
-      // I am connected to a network which is not in the above mentioned networks.
-    } else if (connectivityResult == ConnectivityResult.none) {
-      // I am not connected to any network.
-      return false;
-    }
-    return _hasInternet();
-  }
+  bool get hasInternet => _hasInternet;
 
-  Future<bool> _hasInternet() async {
-    return _internetChecker.hasInternet();
+  @override
+  Stream<bool> get onInternetChanged => _controller.stream;
+  StreamSubscription<bool>? streamSubscription;
+  Future<void> _initializated() async {
+    Future<bool> hasInternet(ConnectivityResult result) async {
+      return result != ConnectivityResult.none &&
+          await _internetChecker.hasInternet();
+    }
+
+    _hasInternet = await hasInternet(await _connectivity.checkConnectivity());
+    _connectivity.onConnectivityChanged
+        .listen((ConnectivityResult event) async {
+      if (_controller.hasListener && !_controller.isClosed) {
+        streamSubscription?.cancel();
+        streamSubscription =
+            hasInternet(event).asStream().listen((bool isConnected) {
+          final bool d = isConnected;
+          _hasInternet = d;
+          _controller.add(
+            d,
+          );
+        });
+      }
+    });
   }
 }

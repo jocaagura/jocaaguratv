@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../global/widgets/my_scaffold_widget.dart';
 import '../../../routes/routes.dart';
 import '../controller/home_controller.dart';
 import '../controller/state/home_state.dart';
@@ -29,7 +30,7 @@ class _HomeViewState extends State<HomeView> {
           builder: (_, BoxConstraints constraints) {
             return RefreshIndicator(
               onRefresh: () async {},
-              child: Scaffold(
+              child: MyScaffold(
                 appBar: AppBar(
                   actions: <IconButton>[
                     IconButton(
