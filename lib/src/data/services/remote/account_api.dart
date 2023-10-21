@@ -6,6 +6,7 @@ import '../../../domain/models/media/media_model.dart';
 import '../../../domain/models/user/user_model.dart';
 import '../../../domain/typedefs.dart';
 import '../http/http.dart';
+import '../local/langage_service.dart';
 import '../local/session_service.dart';
 import '../utils/handle_failure.dart';
 
@@ -13,10 +14,12 @@ class AccountApi {
   AccountApi(
     this._http,
     this._sessionService,
+    this._languageService,
   );
 
   final Http _http;
   final SessionService _sessionService;
+  final LanguageService _languageService;
 
   Future<UserModel?> getAccount(String sessionId) async {
     final Either<HttpFailure, UserModel> result = await _http.request(
@@ -24,6 +27,7 @@ class AccountApi {
       queryParameters: <String, String>{
         ...kQueryParameters,
         'session_id': sessionId,
+        'language': _languageService.languageCode,
       },
       onSuccess: (String responseBody) {
         final Map<String, dynamic> json = Map<String, dynamic>.from(
@@ -46,6 +50,7 @@ class AccountApi {
       queryParameters: <String, String>{
         ...kQueryParameters,
         'session_id': await _sessionService.sessionId ?? '',
+        'language': _languageService.languageCode,
       },
       onSuccess: (String responseBody) {
         final Map<String, dynamic> json = Map<String, dynamic>.from(
@@ -87,6 +92,7 @@ class AccountApi {
       queryParameters: <String, String>{
         ...kQueryParameters,
         'session_id': sessionId,
+        'language': _languageService.languageCode,
       },
       body: <String, dynamic>{
         'media_type': mediaType.name,

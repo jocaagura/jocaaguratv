@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_strategy/url_strategy.dart';
 
 import 'src/data/services/http/http.dart';
+import 'src/data/services/local/langage_service.dart';
 import 'src/data/services/local/session_service.dart';
 import 'src/data/services/remote/account_api.dart';
 import 'src/data/services/remote/auth_api.dart';
@@ -37,15 +38,16 @@ void main() async {
   setPathUrlStrategy();
   WidgetsFlutterBinding.ensureInitialized();
   LocaleSettings.useDeviceLocale();
+  final LanguageService languageService = LanguageService(
+    LocaleSettings.currentLocale.languageCode,
+  );
   const SessionService sessionService = SessionService(FlutterSecureStorage());
   final Http httpImpl = Http(
     kBaseUrl,
     http.Client(),
   );
-  final AccountApi accountApi = AccountApi(
-    httpImpl,
-    sessionService,
-  );
+  final AccountApi accountApi =
+      AccountApi(httpImpl, sessionService, languageService);
 
   final SharedPreferences sharedPreferences =
       await SharedPreferences.getInstance();
@@ -77,12 +79,18 @@ void main() async {
         ),
         Provider<TrendingRepository>(
           create: (_) => TrendingRepositoryImpl(
-            TrendingApi(httpImpl),
+            TrendingApi(
+              httpImpl,
+              languageService,
+            ),
           ),
         ),
         Provider<MoviesRepository>(
           create: (_) => MoviesRepositoryImpl(
-            MoviesApi(httpImpl),
+            MoviesApi(
+              httpImpl,
+              languageService,
+            ),
           ),
         ),
         Provider<PreferenceRepository>(
