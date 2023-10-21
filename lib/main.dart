@@ -2,6 +2,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:nested/nested.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,12 +19,14 @@ import 'src/data/services/remote/trending_api.dart';
 import 'src/data/services/repositories_implementations/account_repository_impl.dart';
 import 'src/data/services/repositories_implementations/auth_repository_impl.dart';
 import 'src/data/services/repositories_implementations/connectivity_repository_imp.dart';
+import 'src/data/services/repositories_implementations/language_repository_impl.dart';
 import 'src/data/services/repositories_implementations/movies_repository_impl.dart';
 import 'src/data/services/repositories_implementations/preference_repository_impl.dart';
 import 'src/data/services/repositories_implementations/trending_repository_impl.dart';
 import 'src/domain/repositories/account_repository.dart';
 import 'src/domain/repositories/auth_repository.dart';
 import 'src/domain/repositories/connectivity_repository.dart';
+import 'src/domain/repositories/language_repository.dart';
 import 'src/domain/repositories/movies_repository.dart';
 import 'src/domain/repositories/preference_repository.dart';
 import 'src/domain/repositories/trending_repository.dart';
@@ -38,6 +41,7 @@ void main() async {
   setPathUrlStrategy();
   WidgetsFlutterBinding.ensureInitialized();
   LocaleSettings.useDeviceLocale();
+  Intl.defaultLocale = LocaleSettings.currentLocale.languageTag;
   final LanguageService languageService = LanguageService(
     LocaleSettings.currentLocale.languageCode,
   );
@@ -54,6 +58,11 @@ void main() async {
   runApp(
     MultiProvider(
       providers: <SingleChildWidget>[
+        Provider<LanguageRepository>(
+          create: (_) => LanguageRepositoryImpl(
+            languageService,
+          ),
+        ),
         Provider<AccountRepository>(
           create: (_) => AccountRepositoryImpl(
             accountApi,

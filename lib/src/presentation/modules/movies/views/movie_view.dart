@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../generated/translations.g.dart';
 import '../../../global/widgets/request_failed_widget.dart';
 import '../controller/movie_controller.dart';
 import '../controller/state/movie_state.dart';
@@ -18,6 +19,7 @@ class MovieView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<MovieController>(
+      key: Key('movie-${LocaleSettings.currentLocale.languageCode}'),
       create: (_) {
         return MovieController(
           MovieState.loading(),

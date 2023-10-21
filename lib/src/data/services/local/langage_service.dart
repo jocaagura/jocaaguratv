@@ -1,11 +1,5 @@
 class LanguageService {
-  LanguageService(this._languageCode);
+  LanguageService(this.languageCode);
 
-  String _languageCode;
-
-  String get languageCode => _languageCode;
-
-  set languageCode(String code) {
-    _languageCode = code;
-  }
+  String languageCode;
 }

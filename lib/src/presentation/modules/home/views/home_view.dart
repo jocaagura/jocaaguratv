@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../generated/translations.g.dart';
 import '../../../global/widgets/my_scaffold_widget.dart';
 import '../../../routes/routes.dart';
 import '../controller/home_controller.dart';
@@ -18,7 +19,9 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
+    Localizations.localeOf(context).languageCode;
     return ChangeNotifierProvider<HomeController>(
+      key: Key('home-${LocaleSettings.currentLocale.languageCode}'),
       create: (_) {
         return HomeController(
           HomeState(),
