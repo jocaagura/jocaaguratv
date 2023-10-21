@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../generated/translations.g.dart';
 import '../controllers/sign_in_controller.dart';
 import '../controllers/state/sign_in_state.dart';
 import 'widgets/submit_button.dart';
@@ -10,6 +11,9 @@ class SignInView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final String username = Translations.of(context).signIn.username;
+    final String password = Translations.of(context).signIn.password;
+
     return ChangeNotifierProvider<SignInController>(
       create: (_) => SignInController(
         const SignInState(),
@@ -30,24 +34,24 @@ class SignInView extends StatelessWidget {
                     absorbing: signInController.state.validating,
                     child: Column(
                       children: <Widget>[
-                        Text('Nombre: ${signInController.state.username}'),
+                        Text('$username: ${signInController.state.username}'),
                         Text(
-                          'Password: ${signInController.state.password.replaceAll(
+                          '$password: ${signInController.state.password.replaceAll(
                             RegExp(r'.'),
                             '*',
                           )}',
                         ),
                         TextFormField(
                           autovalidateMode: AutovalidateMode.onUserInteraction,
-                          decoration: const InputDecoration(
-                            label: Text('Nombre'),
-                            hintText: 'Pepito',
+                          decoration: InputDecoration(
+                            label: Text(username),
+                            hintText: texts.signIn.hintTexts.usernamehint,
                           ),
                           onChanged: signInController.onUserNameChanged,
                           validator: (String? text) {
                             if (text != null) {
                               if (signInController.state.username.isEmpty) {
-                                return 'Escriba un nombre de usuario';
+                                return texts.signIn.errors.username;
                               }
                             }
                             return null;
@@ -58,8 +62,8 @@ class SignInView extends StatelessWidget {
                         ),
                         TextFormField(
                           autovalidateMode: AutovalidateMode.onUserInteraction,
-                          decoration: const InputDecoration(
-                            label: Text('Password'),
+                          decoration: InputDecoration(
+                            label: Text(password),
                             hintText: '******',
                           ),
                           obscureText: true,
@@ -67,7 +71,7 @@ class SignInView extends StatelessWidget {
                           validator: (String? text) {
                             if (text != null) {
                               if (signInController.state.password.length < 4) {
-                                return 'Password invalido';
+                                return texts.signIn.errors.password;
                               }
                             }
                             return null;

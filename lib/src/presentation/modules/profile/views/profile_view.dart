@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../global/controllers/session_controller.dart';
 import '../../../global/controllers/theme_controller.dart';
 import '../../../global/extensions/build_context_ext.dart';
+import '../../../routes/routes.dart';
 
 class ProfileView extends StatelessWidget {
   const ProfileView({super.key});
@@ -16,16 +18,32 @@ class ProfileView extends StatelessWidget {
         child: SizedBox(
           width: double.maxFinite,
           height: double.maxFinite,
-          child: Center(
-            child: SwitchListTile(
-              value: !themeController.isDarkMode,
-              title: Text(
-                context.darkMode ? 'Turn on Light mode' : 'Turn on Dark mode',
+          child: ListView(
+            children: <Widget>[
+              const SizedBox(
+                height: 20.0,
               ),
-              onChanged: (bool value) {
-                themeController.toggleTheme();
-              },
-            ),
+              SwitchListTile(
+                value: !themeController.isDarkMode,
+                title: Text(
+                  context.darkMode ? 'Turn on Light mode' : 'Turn on Dark mode',
+                ),
+                onChanged: (bool value) {
+                  themeController.toggleTheme();
+                },
+              ),
+              ListTile(
+                onTap: () {
+                  context.read<SessionController>().signOut();
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    Routes.signIn,
+                    (_) => false,
+                  );
+                },
+                title: const Text('Cerrar sesión'),
+              ),
+            ],
           ),
         ),
       ),

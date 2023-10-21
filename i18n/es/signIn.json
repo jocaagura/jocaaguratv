@@ -1,4 +1,20 @@
 {
   "username":"Usuario",
-  "password":"Contraseña"
+  "password":"Contraseña",
+  "errors": {
+    "username": "Escriba un nombre de usuario",
+    "password": "Password invalido",
+    "submit": {
+      "notFound": "No encontrado",
+      "unauthorized": "No autorizado",
+      "unknow": "Desconocido",
+      "networkError": "Error de red",
+      "emailNotVerified": "Email sin verificar"
+    }
+  },
+
+  "hintTexts":{
+    "usernamehint": "Pepito"
+  },
+  "buttons": "Registrarse"
 }

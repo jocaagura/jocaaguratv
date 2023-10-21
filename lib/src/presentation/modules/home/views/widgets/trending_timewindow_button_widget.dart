@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../domain/enums.dart';
+import '../../../../../generated/translations.g.dart';
 
 class TrendingTimewindowButtonWidget extends StatelessWidget {
   const TrendingTimewindowButtonWidget({
@@ -18,14 +19,14 @@ class TrendingTimewindowButtonWidget extends StatelessWidget {
       autofocus: true,
       isDense: true,
       underline: const SizedBox.shrink(),
-      items: const <DropdownMenuItem<TimeWindow>>[
+      items: <DropdownMenuItem<TimeWindow>>[
         DropdownMenuItem<TimeWindow>(
           value: TimeWindow.day,
-          child: Text('Last 24H'),
+          child: Text(texts.home.dropdownButton.last24),
         ),
         DropdownMenuItem<TimeWindow>(
           value: TimeWindow.week,
-          child: Text('Last Week'),
+          child: Text(texts.home.dropdownButton.lastWeek),
         ),
       ],
       onChanged: dropDownFunction,

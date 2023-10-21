@@ -48,7 +48,8 @@ class MyScaffold extends StatelessWidget {
                             child: Text(
                               'No internet',
                               style: TextStyle(
-                                  color: Theme.of(context).canvasColor),
+                                color: Theme.of(context).canvasColor,
+                              ),
                             ),
                           ),
                         )

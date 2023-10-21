@@ -32,9 +32,10 @@ ThemeData getTheme(bool isDarkMode) {
           textTheme: GoogleFonts.nunitoSansTextTheme(
             ThemeData.light().textTheme.copyWith(
                   titleSmall: const TextStyle(
-                      color: AppColors.canvasColor,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18.0),
+                    color: AppColors.canvasColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18.0,
+                  ),
                 ),
           ),
           switchTheme: SwitchThemeData(

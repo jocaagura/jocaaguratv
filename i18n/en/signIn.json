@@ -1,4 +1,19 @@
 {
   "username":"Username",
-  "password":"Password"
+  "password":"Password",
+  "errors": {
+    "username": "Invalid username",
+    "password": "Invalid password",
+    "submit": {
+      "notFound": "Not found",
+      "unauthorized": "Unauthorized",
+      "unknow": "Unknow",
+      "networkError": "Network error",
+      "emailNotVerified": "Email not verified"
+    }
+  },
+  "hintTexts":{
+    "usernamehint": "Jhon Doe"
+  },
+  "buttons": "Sign in"
 }

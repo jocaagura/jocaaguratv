@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../generated/translations.g.dart';
+
 class RequestFailedWidget extends StatelessWidget {
   const RequestFailedWidget({required this.onRetry, super.key, this.text});
 
@@ -13,10 +15,14 @@ class RequestFailedWidget extends StatelessWidget {
       color: Theme.of(context).colorScheme.tertiary,
       child: Column(
         children: <Widget>[
-          Text(text ?? 'Request Failed'),
+          const SizedBox(
+            height: 80.0,
+          ),
+          Text(text ?? texts.misc.requestFailed),
           MaterialButton(
+            color: Theme.of(context).canvasColor,
             onPressed: onRetry,
-            child: const Text('Retry'),
+            child: Text(texts.misc.retry),
           ),
         ],
       ),

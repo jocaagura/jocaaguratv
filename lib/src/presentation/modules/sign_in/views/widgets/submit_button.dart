@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../../../domain/either.dart';
 import '../../../../../domain/enums.dart';
 import '../../../../../domain/models/user/user_model.dart';
+import '../../../../../generated/translations.g.dart';
 import '../../../../routes/routes.dart';
 import '../../controllers/sign_in_controller.dart';
 
@@ -25,7 +26,7 @@ class SubmitButton extends StatelessWidget {
                 }
               },
               color: Theme.of(context).colorScheme.primary,
-              child: const Text('Sign in'),
+              child: Text(texts.signIn.buttons),
             ),
     );
   }
@@ -42,11 +43,13 @@ class SubmitButton extends StatelessWidget {
     result.when(
       (SignInFailure failure) {
         final String error = <SignInFailure, String>{
-              SignInFailure.notFound: 'Not found',
-              SignInFailure.unauthorized: 'Unauthorized',
-              SignInFailure.unknow: 'Unknow',
-              SignInFailure.network: 'Network error',
-              SignInFailure.emailNotVerified: 'Email not verified',
+              SignInFailure.notFound: texts.signIn.errors.submit.notFound,
+              SignInFailure.unauthorized:
+                  texts.signIn.errors.submit.unauthorized,
+              SignInFailure.unknow: texts.signIn.errors.submit.unknow,
+              SignInFailure.network: texts.signIn.errors.submit.networkError,
+              SignInFailure.emailNotVerified:
+                  texts.signIn.errors.submit.emailNotVerified,
             }[failure] ??
             'Absolutely unknow';
 
