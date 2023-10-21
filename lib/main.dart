@@ -26,6 +26,7 @@ import 'src/domain/repositories/connectivity_repository.dart';
 import 'src/domain/repositories/movies_repository.dart';
 import 'src/domain/repositories/preference_repository.dart';
 import 'src/domain/repositories/trending_repository.dart';
+import 'src/generated/translations.g.dart';
 import 'src/my_app.dart';
 import 'src/presentation/global/controllers/favorites/favorites_controller.dart';
 import 'src/presentation/global/controllers/favorites/state/favorites_state.dart';
@@ -35,6 +36,7 @@ import 'src/presentation/global/controllers/theme_controller.dart';
 void main() async {
   setPathUrlStrategy();
   WidgetsFlutterBinding.ensureInitialized();
+  LocaleSettings.useDeviceLocale();
   const SessionService sessionService = SessionService(FlutterSecureStorage());
   final Http httpImpl = Http(
     kBaseUrl,
@@ -107,7 +109,9 @@ void main() async {
           },
         ),
       ],
-      child: const MyApp(),
+      child: TranslationProvider(
+        child: const MyApp(),
+      ),
     ),
   );
 }

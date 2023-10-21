@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 
+import 'generated/translations.g.dart';
 import 'presentation/global/controllers/theme_controller.dart';
 import 'presentation/global/theme.dart';
 import 'presentation/routes/app_routes.dart';
@@ -20,6 +22,13 @@ class MyApp extends StatelessWidget {
         initialRoute: Routes.splash,
         routes: appRoutes,
         theme: getTheme(themeController.isDarkMode),
+        supportedLocales: LocaleSettings.supportedLocales,
+        locale: TranslationProvider.of(context).flutterLocale,
+        localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+          GlobalMaterialLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
         onUnknownRoute: (_) => MaterialPageRoute<dynamic>(
           builder: (BuildContext context) => Scaffold(
             body: Center(
